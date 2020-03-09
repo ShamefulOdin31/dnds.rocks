@@ -52,23 +52,23 @@
         }
 
         // Validating the first password.
-        if(empty(trim(filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS))))
+        if(empty(trim($_POST['password'])))
         {
             $passwordError = "Please enter a password";
         }
         else
         {
-            $password = trim(filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+            $password = trim($_POST['password']);
         }
 
         // Validating the confirmation password.
-        if(empty(trim(filter_input(INPUT_POST, 'confirm_password', FILTER_SANITIZE_FULL_SPECIAL_CHARS))))
+        if(empty(trim($_POST['confirm_password'])))
         {
             $confirmError = "Please enter a password";
         }
         else
         {
-            $passwordConfirm = trim(filter_input(INPUT_POST, 'confirm_password', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+            $passwordConfirm = trim($_POST['confirm_password']);
 
             // Checks to see if the password error is empty and to see if the password match
             if(empty($passwordError) && ($password != $passwordConfirm))
@@ -87,6 +87,8 @@
             $statement->bindParam(":password", $queryPass);
 
             $queryUser = $username;
+
+            // Hashes the password
             $queryPass = password_hash($password, PASSWORD_DEFAULT);
 
             if($statement->execute())
@@ -101,6 +103,8 @@
 
             unset($statment);
         }
+
+        unset($db);
     }
 ?>
 
@@ -111,16 +115,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
-    <style type="text/css">
-        body{font: 14px sans-serif}
-        .wrapper{width: 350px; padding: 20px;}
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="wrapper">
         <h2>Register</h2>
         <p>Fill out this form to create a account.</p>
-        <form action="registration.php" method="post">
+        <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
             <div class="form-group">
                 <label>Username</label>
                 <input class="form-control" type="text" name="username">
