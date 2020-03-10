@@ -30,7 +30,11 @@
             <li class="nav-item">
                 <a class="nav-link active" href="account.php">Account</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="create.php">Create Character</a>
+            </li>
         </ul>
+        <p>Login successful</p>
         <h1>Welcome <?= htmlspecialchars($_SESSION["username"]) ?></h1>
 
         <p>Your characters are listed here</p>

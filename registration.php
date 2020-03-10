@@ -114,28 +114,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
+        crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" 
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" 
+        crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="wrapper">
+    <div class="container">
         <h2>Register</h2>
         <p>Fill out this form to create a account.</p>
         <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
             <div class="form-group">
-                <label>Username</label>
-                <input class="form-control" type="text" name="username">
-                <span class="help-block"><?= $userError ?></span>
+                <div class="col-md-5">
+                    <label>Username</label>
+                    <input class="form-control" type="text" name="username">
+                    <span class="help-block"><?= $userError ?></span>
+                </div>
             </div>
             <div class="form-group">
-                <label>Password</label>
-                <input class="form-control" type="password" name="password">
-                <span class="help-block"><?= $passwordError ?></span>
+                <div class="col-md-5">
+                    <label>Password</label>
+                    <input class="form-control" type="password" name="password">
+                    <span class="help-block"><?= $passwordError ?></span>
+                </div>
             </div>
             <div class="form-group">
-                <label>Confirm Password</label>
-                <input class="form-control" type="password" name="confirm_password">
-                <span class=help/block><?= $confirmError ?></span>
+                <div class="col-md-5">
+                    <label>Confirm Password</label>
+                    <input class="form-control" type="password" name="confirm_password">
+                    <span class=help/block><?= $confirmError ?></span>
+                </div>
             </div>
             <div class="form-group">
                 <input class="btn btn-primary" type="submit" value="Submit">
