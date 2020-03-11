@@ -1,11 +1,22 @@
 <?php 
+    require "connect.php";
     session_start();
+
+    $dndCharacters;
 
     if(!isset($_SESSION['loggedin']) || $_SESSION["loggedin"] !== true)
     {
         header("location: login.php");
         exit;
     }
+
+    $query = "SELECT cname, race, class, background, notes FROM dndCharacters WHERE userOwner = :loginID";
+
+    $statement = $db->prepare($query);
+    $statement->bindParam(":loginID", $_SESSION["loginid"]);
+    $statement->execute();
+    $dndCharacters = $statement->fetchAll();
+
 ?>
 
 <!DOCTYPE html>
@@ -22,18 +33,39 @@
         crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="container">
-        <ul class="nav nav-pills">
+    <!-- Start of Nav -->
+    <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+        <a class="navbar-brand" href="index.php">Home</a>
+        <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="index.php">Home</a>
+                <a class="nav-link" href="account.php">Account</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="account.php">Account</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="create.php">Create Character</a>
+                <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
+                    <a class="nav-link" href="create.php">Create Character</a>
+                <?php else :?>
+                    <a class="nav-link disabled" href="create.php">Create Character</a>
+                <?php endif ?>
             </li>
         </ul>
+        <ul class="navbar-nav ml-auto">
+            <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php">Logout</a>
+                </li>
+            <?php else :?>
+                <li class="nav-item">
+                    <a class="nav-link" href="registration.php">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="login.php">Login</a>
+                </li>
+            <?php endif ?>        
+        </ul>
+    </nav>
+    
+    <!-- Start of content -->
+    <div class="container">
         <p>Login successful</p>
         <h1>Welcome <?= htmlspecialchars($_SESSION["username"]) ?></h1>
 
@@ -53,6 +85,16 @@
                 </tr>
             </thead>
             <tbody>
+                
+                <?php foreach($dndCharacters as $key => $value) :?>
+                    <tr>
+                        <th scope="row"><?= $value["cname"] ?></th>
+                        <td><?= $value['race'] ?></td>
+                        <td><?= $value['class'] ?></td>
+                        <td><?= $value['background'] ?></td>
+                        <td><?= $value['notes'] ?></td>
+                    </tr>
+                <?php endforeach ?>
                 
             </tbody>
         </table>

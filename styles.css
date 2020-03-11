@@ -1,6 +1,4 @@
-body .container
+.nav
 {
-    font: 14px sans-serif;
-    width: 350px;
-    padding: 20px;
+    background-color: grey;
 }

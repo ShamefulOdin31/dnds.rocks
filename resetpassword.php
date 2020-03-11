@@ -88,6 +88,36 @@
         crossorigin="anonymous"></script>
 </head>
 <body>
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+    <a class="navbar-brand" href="index.php">Home</a>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="account.php">Account</a>
+        </li>
+        <li class="nav-item">
+            <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
+                <a class="nav-link" href="create.php">Create Character</a>
+            <?php else :?>
+                <a class="nav-link disabled" href="create.php">Create Character</a>
+            <?php endif ?>
+        </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+        <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
+            <li class="nav-item">
+                <a class="nav-link" href="logout.php">Logout</a>
+            </li>
+        <?php else :?>
+            <li class="nav-item">
+                <a class="nav-link" href="registration.php">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="login.php">Login</a>
+            </li>
+        <?php endif ?>
+                
+    </ul>
+</nav>
     <div class="container">
         <h2>Reset Password</h2>
         <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">

@@ -10,6 +10,7 @@
 
     catch(PDOException $e)
     {
-        die("DB Error" . $e->getMessage());
+        echo "DB Error" . $e->getMessage();
+        die();
     }
 ?>
