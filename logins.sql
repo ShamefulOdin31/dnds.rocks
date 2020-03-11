@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 09, 2020 at 11:35 PM
+-- Generation Time: Mar 11, 2020 at 02:56 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -42,7 +42,9 @@ CREATE TABLE `logins` (
 INSERT INTO `logins` (`loginID`, `username`, `password`, `timeCreated`) VALUES
 (1, 'shamefulodin31', '$2y$10$jprVfA.bbRWHjS31f4nKz.E8ElL2HPPl36iSM0v5T8D8vWV4Mhy.C', '2020-03-09'),
 (2, 'richard', '$2y$10$4fBTQe3LqHoeCIJINdHiYOFCF22G/74Lj4RKhuil6tHiVpoE/jUyS', '2020-03-09'),
-(3, 'test', '$2y$10$E0HYMSd.fHmx.C/WgKVGwuBzHDW3aZn4Xi6YPqDvddhMFFKF/sYOe', '2020-03-09');
+(3, 'test', '$2y$10$E0HYMSd.fHmx.C/WgKVGwuBzHDW3aZn4Xi6YPqDvddhMFFKF/sYOe', '2020-03-09'),
+(4, 'hi', '$2y$10$djW6weFeJFn8.yyYobzUGu/GPR0sUg7QVrqRsGng365kzHgaHiX4e', '2020-03-10'),
+(5, 'hfs', '$2y$10$WgBjtf.DKduSsUjwH.VVsu77PT1SrqpxkI/bjm0YIbMVtAT9VHPR.', '2020-03-10');
 
 --
 -- Indexes for dumped tables
@@ -63,7 +65,7 @@ ALTER TABLE `logins`
 -- AUTO_INCREMENT for table `logins`
 --
 ALTER TABLE `logins`
-  MODIFY `loginID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `loginID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
