@@ -2,21 +2,22 @@
     require "connect.php";
     session_start();
 
-    $dndCharacters;
-
     if(!isset($_SESSION['loggedin']) || $_SESSION["loggedin"] !== true)
     {
         header("location: login.php");
         exit;
     }
 
-    $query = "SELECT characterID, cname, race, class, background, notes FROM dndCharacters WHERE userOwner = :loginID";
+    $queryResults;
+
+    $query = "SELECT cname, race, class, background, notes FROM dndCharacters WHERE characterID = :characterID";
+    $characterID = filter_input(INPUT_GET, 'characterID', FILTER_SANITIZE_NUMBER_INT);
+
 
     $statement = $db->prepare($query);
-    $statement->bindParam(":loginID", $_SESSION["loginid"]);
+    $statement->bindParam(":characterID", $characterID);
     $statement->execute();
-    $dndCharacters = $statement->fetchAll();
-
+    $queryResults = $statement->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +25,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
+    <title>Details</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
         crossorigin="anonymous">
@@ -63,45 +64,42 @@
             <?php endif ?>        
         </ul>
     </nav>
-    
-    <!-- Start of content -->
+
     <div class="container">
-        <p>Login successful</p>
-        <h1>Welcome <?= htmlspecialchars($_SESSION["username"]) ?></h1>
-
-        <p>Your characters are listed here</p>
-
-        <table class="table table-striped table-hover">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Race</th>
-                    <th scope="col">Class</th>
-                    <th scope="col">Background</th>
-                    <th scope="col">Notes</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                
-                <?php foreach($dndCharacters as $key => $value) :?>
-                    <tr>
-                        <th scope="row"><?= $value["cname"] ?></th>
-                        <td><?= $value['race'] ?></td>
-                        <td><?= $value['class'] ?></td>
-                        <td><?= $value['background'] ?></td>
-                        <td><?= $value['notes'] ?></td>
-                        <td><a href="select.php?characterID=<?= $value['characterID'] ?>">Select</a></td>
-                    </tr>
-                <?php endforeach ?>
-                
-            </tbody>
-        </table>
-        <p>
-            <a class="btn btn-primary" href="upload.php">Upload</a>
-        </p>
+        <h2>Character Details</h2>
+        <div class="row">
+            <div class="col">
+                <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Race</th>
+                            <th scope="col">Class</th>
+                            <th scope="col">Background</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($queryResults as $key => $value):?>
+                            <tr>
+                                <th scope="row"><?= $value['cname'] ?></th>
+                            </tr>
+                        <?php endforeach ?>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col">
+                <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Strength</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Add stats table content -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </body>
 </html>

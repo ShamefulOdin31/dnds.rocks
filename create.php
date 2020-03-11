@@ -84,7 +84,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Create Character</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
         crossorigin="anonymous">
@@ -93,6 +93,7 @@
         crossorigin="anonymous"></script>
 </head>
 <body>
+<!-- Start of navbar -->
 <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
     <a class="navbar-brand" href="index.php">Home</a>
     <ul class="navbar-nav mr-auto">
@@ -123,6 +124,7 @@
                 
     </ul>
 </nav>
+<!-- Start of content -->
     <div class="container">
         <h2>Create a character</h2>
         <p>Fill out the form to create a character</p>

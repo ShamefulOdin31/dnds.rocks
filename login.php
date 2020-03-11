@@ -159,6 +159,8 @@
             </div>
             <div class="form-group">
                 <input class="btn btn-primary" type="submit" value="Login">
+                <a class="btn btn-warning" href="resetpassword.php"> Reset your password</a>
+
             </div>
         </form>
     </div>
