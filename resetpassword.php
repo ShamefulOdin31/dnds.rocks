@@ -88,11 +88,12 @@
         crossorigin="anonymous"></script>
 </head>
 <body>
+<!-- Start of Nav -->
 <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
     <a class="navbar-brand" href="index.php">Home</a>
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-            <a class="nav-link" href="account.php">Account</a>
+            <a class="nav-link" href="account.php?sort=name">Account</a>
         </li>
         <li class="nav-item">
             <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
@@ -115,7 +116,6 @@
                 <a class="nav-link" href="login.php">Login</a>
             </li>
         <?php endif ?>
-                
     </ul>
 </nav>
     <div class="container">

@@ -15,9 +15,14 @@
     if($_SERVER["REQUEST_METHOD"] == "POST")
     {
         // Validating the username
-        if(empty(trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS))))
+        if(empty(trim($_POST['username'])))
         {
-            $userError = "Please enter a username";
+            $userError = "Please enter a email";
+        }
+
+        elseif(!filter_input(INPUT_POST, 'username', FILTER_VALIDATE_EMAIL))
+        {
+            $userError = "Please enter a valid email";
         }
 
         else
@@ -120,11 +125,12 @@
         crossorigin="anonymous"></script>
 </head>
 <body>
+<!-- Start of Nav -->
 <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
     <a class="navbar-brand" href="index.php">Home</a>
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-            <a class="nav-link" href="account.php">Account</a>
+            <a class="nav-link" href="account.php?sort=name">Account</a>
         </li>
         <li class="nav-item">
             <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
@@ -147,7 +153,6 @@
                 <a class="nav-link" href="login.php">Login</a>
             </li>
         <?php endif ?>
-                
     </ul>
 </nav>
     <div class="container">

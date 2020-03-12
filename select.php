@@ -18,6 +18,18 @@
     $statement->bindParam(":characterID", $characterID);
     $statement->execute();
     $queryResults = $statement->fetchAll();
+
+    $stats = "SELECT strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints FROM stats WHERE characterID = :characterID";
+    $statement2 = $db->prepare($stats);
+    $statement2->bindParam(":characterID", $characterID);
+    $statement2->execute();
+    $statsResult = $statement2->fetchAll();
+
+    $images = "SELECT uploadLocation FROM uploads WHERE characterID = :characterID";
+    $statement3 = $db->prepare($images);
+    $statement3->bindParam(":characterID", $characterID);
+    $statement3->execute();
+    $uploadResults = $statement3->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -34,36 +46,36 @@
         crossorigin="anonymous"></script>
 </head>
 <body>
-    <!-- Start of Nav -->
-    <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
-        <a class="navbar-brand" href="index.php">Home</a>
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="account.php">Account</a>
-            </li>
-            <li class="nav-item">
-                <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
-                    <a class="nav-link" href="create.php">Create Character</a>
-                <?php else :?>
-                    <a class="nav-link disabled" href="create.php">Create Character</a>
-                <?php endif ?>
-            </li>
-        </ul>
-        <ul class="navbar-nav ml-auto">
+<!-- Start of Nav -->
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+    <a class="navbar-brand" href="index.php">Home</a>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="account.php?sort=name">Account</a>
+        </li>
+        <li class="nav-item">
             <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
-                <li class="nav-item">
-                    <a class="nav-link" href="logout.php">Logout</a>
-                </li>
+                <a class="nav-link" href="create.php">Create Character</a>
             <?php else :?>
-                <li class="nav-item">
-                    <a class="nav-link" href="registration.php">Register</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="login.php">Login</a>
-                </li>
-            <?php endif ?>        
-        </ul>
-    </nav>
+                <a class="nav-link disabled" href="create.php">Create Character</a>
+            <?php endif ?>
+        </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+        <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
+            <li class="nav-item">
+                <a class="nav-link" href="logout.php">Logout</a>
+            </li>
+        <?php else :?>
+            <li class="nav-item">
+                <a class="nav-link" href="registration.php">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="login.php">Login</a>
+            </li>
+        <?php endif ?>
+    </ul>
+</nav>
 
     <div class="container">
         <h2>Character Details</h2>
@@ -82,6 +94,9 @@
                         <?php foreach($queryResults as $key => $value):?>
                             <tr>
                                 <th scope="row"><?= $value['cname'] ?></th>
+                                <th scope="row"><?= $value['race'] ?></th>
+                                <th scope="row"><?= $value['class'] ?></th>
+                                <th scope="row"><?= $value['background'] ?></th>
                             </tr>
                         <?php endforeach ?>
                     </tbody>
@@ -91,13 +106,65 @@
                 <table class="table table-striped table-hover">
                     <thead class="thead-dark">
                         <tr>
-                            <th scope="col">Strength</th>
+                            <th scope="row">Stats</th>
+                            <th scope="row">Value</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Add stats table content -->
+                        <tr>
+                            
+                            <?php foreach($statsResult as $key => $value):?>
+                                <th scope="col">Strength</th>
+                                <th scope="col"><?= $value['strength'] ?></th>
+                            <?php endforeach ?>
+                        </tr>
+                        <tr>
+                            <?php foreach($statsResult as $key => $value):?>
+                                <th scope="col">Intelligence</th>
+                                <th scope="col"><?= $value['intelligence'] ?></th>
+                            <?php endforeach ?>
+                        </tr>
+                        <tr>
+                            <?php foreach($statsResult as $key => $value):?>
+                                <th scope="col">Dexterity</th>
+                                <th scope="col"><?= $value['dexterity'] ?></th>
+                            <?php endforeach ?>
+                        </tr>
+                        <tr>
+                            <?php foreach($statsResult as $key => $value):?>
+                                <th scope="col">Wisdom</th>
+                                <th scope="col"><?= $value['wisdom'] ?></th>
+                            <?php endforeach ?>
+                        </tr>
+                        <tr>
+                            <?php foreach($statsResult as $key => $value):?>
+                                <th scope="col">Constitution</th>
+                                <th scope="col"><?= $value['constitution'] ?></th>
+                            <?php endforeach ?>
+                        </tr>
+                        <tr>
+                            <?php foreach($statsResult as $key => $value):?>
+                                <th scope="col">Charisma</th>
+                                <th scope="col"><?= $value['charisma'] ?></th>
+                            <?php endforeach ?>
+                        </tr>
+                        <tr>
+                            <?php foreach($statsResult as $key => $value):?>
+                                <th scope="col">Hit Points</th>
+                                <th scope="col"><?= $value['hitpoints'] ?></th>
+                            <?php endforeach ?>
+                        </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <img src="C:\xampp\htdocs\webdevproject\uploads\Warframe0001.jpg" alt="">
+                <?php foreach($uploadResults as $key => $value) :?>
+                    <img src="<?= $value?>" alt="">
+                    <p>test</p>
+                <?php endforeach ?>
             </div>
         </div>
     </div>

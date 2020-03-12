@@ -43,7 +43,6 @@
         if(file_is_an_image($temporary_image_path, $new_image_path))
         {
             move_uploaded_file($temporary_image_path, $new_image_path);
-            echo "success!";
         }
     }
 ?>
@@ -95,7 +94,7 @@
     </ul>
 </nav>
     <div class="container mt-3">
-        <form action="account.php" method="post" enctype="multipart/form-data">
+        <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" enctype="multipart/form-data">
             <div class="custom-file mb-3">
                 <label for="image" class="customer-file-label">Image Filename:</label>
                 <input type="file" name="image" id="image" class="custom-file-input" id="customFile">

@@ -1,24 +1,31 @@
 <?php 
+    
     require "connect.php";
 
     session_start();
+    // Verifies that the user is logged in
     if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)
     {
         header("location: login.php");
         exit;
     }
 
+    // Variable for error messages displayed on the page
     $nameError = "";
     $raceError = "";
     $classError = "";
     $backgroundError = "";
     $notesError = "";
     
+    // Gets and decodes the race data from the api
     $raceJSON = file_get_contents('http://www.dnd5eapi.co/api/races');
     $races = json_decode($raceJSON, true);
+
+    // Gets and decodes the class data from the api
     $classJSON = file_get_contents('http://www.dnd5eapi.co/api/classes');
     $classes = json_decode($classJSON, true);
 
+    // Sanitizes user form input
     $cname = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $race = filter_input(INPUT_POST, 'races', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $class = filter_input(INPUT_POST, 'classes', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -93,12 +100,12 @@
         crossorigin="anonymous"></script>
 </head>
 <body>
-<!-- Start of navbar -->
+<!-- Start of Nav -->
 <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
     <a class="navbar-brand" href="index.php">Home</a>
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-            <a class="nav-link" href="account.php">Account</a>
+            <a class="nav-link" href="account.php?sort=name">Account</a>
         </li>
         <li class="nav-item">
             <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
@@ -121,7 +128,6 @@
                 <a class="nav-link" href="login.php">Login</a>
             </li>
         <?php endif ?>
-                
     </ul>
 </nav>
 <!-- Start of content -->
