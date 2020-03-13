@@ -30,6 +30,7 @@
     $class = $_SESSION['class'];
     $background = $_SESSION['background'];
     $notes = $_SESSION['notes'];
+    $search = $_SESSION['search'];
 
     $strength = filter_input(INPUT_POST, 'strength', FILTER_SANITIZE_NUMBER_INT);
     $intelligence = filter_input(INPUT_POST, 'intelligence', FILTER_SANITIZE_NUMBER_INT);
@@ -79,8 +80,8 @@
         if(empty($strengthError) && empty($intelligenceError) && empty($dexterityError) && empty($wisdomError) && empty($constitutionError) && empty($charismaError))
         {
             // Character and stat creation
-            $query = "INSERT INTO dndcharacters (CName, Race, Class, Background, Notes, userOwner, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints) 
-                values (:cname, :race, :class, :background, :notes, :userOwner, :strength, :intelligence, :dexterity, :wisdom, :constitution, :charisma, :hitpoints)";
+            $query = "INSERT INTO dndcharacters (CName, Race, Class, Background, Notes, userOwner, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints, searchBy) 
+                values (:cname, :race, :class, :background, :notes, :userOwner, :strength, :intelligence, :dexterity, :wisdom, :constitution, :charisma, :hitpoints, :searchBy)";
 
             $statement = $db->prepare($query);
 
@@ -97,6 +98,7 @@
             $statement->bindParam(":constitution", $constitution);
             $statement->bindParam(":charisma", $charisma);
             $statement->bindParam(":hitpoints", $hitPoints);
+            $statement->bindParam(":searchBy", $search);
 
             $statement->execute();
 
@@ -167,7 +169,7 @@
                 }
             }
         }
-        header("location: account.php?sort=name");
+        header("location: account.php?id=1&type=name");
     }
 ?>
 

@@ -14,13 +14,22 @@
 
     $queryResults;
 
-    $query = "SELECT cname, race, class, background, notes, userOwner, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints FROM dndCharacters WHERE characterID = :characterID";
+    $query = "SELECT cname, race, class, background, notes, userOwner, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints, searchBy FROM dndCharacters WHERE characterID = :characterID && searchBy = :search";
     $characterID = filter_input(INPUT_GET, 'characterID', FILTER_SANITIZE_NUMBER_INT);
+    $search = filter_input(INPUT_GET, 'type', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
+    //Verifies that the get url is consistant with the db
     $statement = $db->prepare($query);
     $statement->bindParam(":characterID", $characterID);
+    $statement->bindParam(":search", $search);
     $statement->execute();
     $queryResults = $statement->fetchAll();
+
+    if($statement->rowCount() == 0)
+    {
+        http_response_code(404);
+        die();
+    }
 
     // For image Display
     $images = "SELECT uploadLocation FROM uploads WHERE characterID = :characterID";
@@ -46,7 +55,7 @@
 <body>
 <!-- Start of Nav -->
 <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
-    <a class="navbar-brand" href="i<?= $navbarLeft[0]['navurl'] ?>"><?= $navbarLeft[0]['navItemName'] ?></a>
+    <a class="navbar-brand" href="<?= $navbarLeft[0]['navurl'] ?>"><?= $navbarLeft[0]['navItemName'] ?></a>
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
             <a class="nav-link" href="<?= $navbarLeft[1]['navurl'] ?>"><?= $navbarLeft[1]['navItemName'] ?></a>

@@ -19,7 +19,8 @@
     $classError = "";
     $backgroundError = "";
     $notesError = "";
-    
+    $searchError = "";
+
     // Gets and decodes the race data from the api
     $raceJSON = file_get_contents('http://www.dnd5eapi.co/api/races');
     $races = json_decode($raceJSON, true);
@@ -34,6 +35,7 @@
     $class = filter_input(INPUT_POST, 'classes', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $background = filter_input(INPUT_POST, 'background', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $notes = filter_input(INPUT_POST, 'notes', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $search = filter_input(INPUT_POST, 'search', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
     if($_SERVER["REQUEST_METHOD"] == "POST")
     {
@@ -62,6 +64,11 @@
             $notesError = "Please enter a valid background";
         }
 
+        if(empty(trim($search)))
+        {
+            $searchError = "Please enter in a value. Use your characters name if you can't decide";
+        }
+
         if(empty($nameError) && empty($raceError) && empty($classError) && empty($backgroundError) && empty($notesError))
         {
             $_SESSION['cname'] = $cname;
@@ -69,6 +76,7 @@
             $_SESSION['class'] = $class;
             $_SESSION['background'] = $background;
             $_SESSION['notes'] = $notes;
+            $_SESSION['search'] = str_replace(' ', '-',$search);
             
             header("location: stats.php");
         }
@@ -168,6 +176,13 @@
                     <label>Notes</label>
                     <input type="textarea" name="notes" class="form-control">
                     <span class="help-block"><?= $notesError ?></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-5">
+                    <label for="search">Search By</label>
+                    <input type="text" name="search" class="form-control">
+                    <span class="help-block"><?= $searchError ?></span>
                 </div>
             </div>
             <div class="form-group">

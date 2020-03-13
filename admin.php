@@ -16,7 +16,45 @@
 
 	include "utility.php";
     $navbarLeft = navbarArray("l", $db);
-    $navbarRight = navbarArray("r", $db);
+	$navbarRight = navbarArray("r", $db);
+	
+	$query = "SELECT characterID, cname, race, class, background, notes, searchBy FROM dndCharacters WHERE userOwner = :loginID";
+
+    $sort = ["name" => " ORDER BY cname",
+             "race" => " ORDER BY race",
+             "class" => " ORDER BY class",
+             "background" => " ORDER BY background"];
+
+
+    if($_GET['id'] == '1' && $_GET['type'] == 'name')
+    {
+        $query .= $sort["name"];
+    }
+
+    elseif($_GET['id'] == '2' && $_GET['type'] == 'race')
+    {
+        $query .= $sort["race"];
+    }
+
+    elseif($_GET['id'] == '3' && $_GET['type'] == 'class')
+    {
+        $query .= $sort["class"];
+    }
+
+    elseif($_GET['id'] == '4' && $_GET['type'] == 'background')
+    {
+        $query .= $sort["background"];
+    }
+    else
+    {
+        http_response_code(404);
+        die();
+    }
+
+    $statement = $db->prepare($query);
+    $statement->bindParam(":loginID", $_SESSION["loginid"]);
+    $statement->execute();
+    $dndCharacters = $statement->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -67,38 +105,60 @@
 </nav>
 
 	<!-- Start of content -->
-	<div class="container">
-		<h1>Welcome Richard Schentag</h1>
-		<p>Below are all of the user accounts</p>
-		<a href="addAccount.php">Add Account</a>
-		<table class="table table-striped table-hover">
-			<thead class="thead-dark">
+<div class="container">
+	<h1>Welcome Richard Schentag</h1>
+	<p>Below are all of the user accounts</p>
+	<a href="addAccount.php">Add Account</a>
+	<table class="table table-striped table-hover">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">Login ID</th>
+				<th scope="col">Username</th>
+				<th scope="col">Date Created</th>
+				<th scope="col"></th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach($userAccounts as $key => $value) :?>
 				<tr>
-					<th scope="col">Login ID</th>
-					<th scope="col">Username</th>
-					<th scope="col">Date Created</th>
-					<th scope="col"></th>
-					<th scope="col"></th>
+					<th scope="row"><?= $value['loginid'] ?></th>
+					<td><?= $value['username'] ?></td>
+					<td><?= $value['timeCreated'] ?></td>
+					<td><a href="updateAccount.php?id=<?= $value['loginid'] ?>">Update</a></td>
+					<td><a href="adminDelete.php?id=<?= $value['loginid'] ?>">Delete</a></td>
 				</tr>
-			</thead>
-			<tbody>
-				<?php foreach($userAccounts as $key => $value) :?>
-					<tr>
-						<th scope="row"><?= $value['loginid'] ?></th>
-						<td><?= $value['username'] ?></td>
-						<td><?= $value['timeCreated'] ?></td>
-						<td><a href="updateAccount.php?id=<?= $value['loginid'] ?>">Update</a></td>
-						<td><a href="adminDelete.php?id=<?= $value['loginid'] ?>">Delete</a></td>
-					</tr>
-				<?php endforeach ?>
-			</tbody>
-		</table>
-		<table class="table table-striped table-hove">
-			<thead class="thead-dark">
-				
-			</thead>
-		</table>
-	</div>
+			<?php endforeach ?>
+		</tbody>
+	</table>
+	<p>Below are all characters from all users</p>
+	<table class="table table-striped table-hover">
+	<thead class="thead-dark">
+		<tr>
+			<th scope="col"><a href="account.php?id=1&type=name">Name</a></th>
+			<th scope="col"><a href="account.php?id=2&type=race">Race</a></th>
+			<th scope="col"><a href="account.php?id=3&type=class">Class</a></th>
+			<th scope="col"><a href="account.php?id=4&type=background">Background</a></th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php foreach($dndCharacters as $key => $value) :?>
+			<tr>
+				<th scope="row"><?= $value["cname"] ?></th>
+				<td><?= $value['race'] ?></td>
+				<td><?= $value['class'] ?></td>
+				<td><?= $value['background'] ?></td>
+				<td><?= $value['notes'] ?></td>
+				<td><a href="select.php?characterID=<?= $value['characterID'] ?>&type=<?= str_replace(' ', '-', $value['searchBy']) ?>">Select</a></td>
+				<td><a href="spells.php?characterID=<?= $value['characterID'] ?>&type=<?= str_replace(' ', '-', $value['searchBy']) ?>">Spells</a></td>
+			</tr>
+		<?php endforeach ?>
+	</tbody>
+</table>
+</div>
 </body>
 
 </html>

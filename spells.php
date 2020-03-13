@@ -6,6 +6,25 @@
     $navbarRight = navbarArray("r", $db);
 
     $characterID = filter_input(INPUT_GET, 'characterID', FILTER_SANITIZE_NUMBER_INT);
+    $characterName = str_replace('-', ' ', filter_input(INPUT_GET, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+
+    //Verifies that the get url is consistant with the db
+    $query = "SELECT cname, race, class, background, notes, userOwner, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints, searchBy FROM dndCharacters WHERE characterID = :characterID && searchBy = :search";
+    $characterID = filter_input(INPUT_GET, 'characterID', FILTER_SANITIZE_NUMBER_INT);
+    $search = filter_input(INPUT_GET, 'type', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+    //Verifies that the get url is consistant with the db
+    $statement = $db->prepare($query);
+    $statement->bindParam(":characterID", $characterID);
+    $statement->bindParam(":search", $search);
+    $statement->execute();
+    $queryResults = $statement->fetchAll();
+
+    if($statement->rowCount() == 0)
+    {
+        http_response_code(404);
+        die();
+    }
 
     $spellsJSON = file_get_contents("http://dnd5eapi.co/api/spells");
     $spellsOutput = json_decode($spellsJSON, true);

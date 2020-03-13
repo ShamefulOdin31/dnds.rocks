@@ -1,6 +1,7 @@
 <?php 
     require "connect.php";
 
+    // For navbar
     include "utility.php";
     $navbarLeft = navbarArray("l", $db);
     $navbarRight = navbarArray("r", $db);
