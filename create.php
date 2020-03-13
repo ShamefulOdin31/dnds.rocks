@@ -1,5 +1,4 @@
 <?php 
-    
     require "connect.php";
 
     session_start();
@@ -61,25 +60,12 @@
 
         if(empty($nameError) && empty($raceError) && empty($classError) && empty($backgroundError) && empty($notesError))
         {
-            $query = "INSERT INTO dndcharacters (CName, Race, Class, Background, Notes, userOwner) values (:cname, :race, :class, :background, :notes, :userOwner)";
-
-            $statement = $db->prepare($query);
-
-            $statement->bindParam(":cname", $cname);
-            $statement->bindParam(":race", $race);
-            $statement->bindParam(":class", $class);
-            $statement->bindParam(":background", $background);
-            $statement->bindParam(":notes", $notes);
-            $statement->bindParam(":userOwner", $_SESSION['loginid']);
-
-            $statement->execute();
-
-            $insertID = $db->lastInsertId();
-
-            $_SESSION['characterID'] = $insertID;
+            $_SESSION['cname'] = $cname;
             $_SESSION['race'] = $race;
             $_SESSION['class'] = $class;
-
+            $_SESSION['background'] = $background;
+            $_SESSION['notes'] = $notes;
+            
             header("location: stats.php");
         }
         unset($db);

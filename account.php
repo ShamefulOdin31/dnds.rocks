@@ -116,6 +116,7 @@
                         <td><?= $value['background'] ?></td>
                         <td><?= $value['notes'] ?></td>
                         <td><a href="select.php?characterID=<?= $value['characterID'] ?>">Select</a></td>
+                        <td><a href="spells.php?characterID=<?= $value['characterID'] ?>">Spells</a></td>
                     </tr>
                 <?php endforeach ?>
             </tbody>

@@ -1,7 +1,5 @@
 <?php 
     require "connect.php";
-    
-
     session_start();
 
     if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)
@@ -74,6 +72,32 @@
 
         if(empty($strengthError) && empty($intelligenceError) && empty($dexterityError) && empty($wisdomError) && empty($constitutionError) && empty($charismaError))
         {
+            // Start of character creation
+            $cname = $_SESSION['cname'];
+            $race = $_SESSION['race'];
+            $class = $_SESSION['class'];
+            $background = $_SESSION['background'];
+            $notes = $_SESSION['notes'];
+
+            $query = "INSERT INTO dndcharacters (CName, Race, Class, Background, Notes, userOwner) values (:cname, :race, :class, :background, :notes, :userOwner)";
+
+            $statement = $db->prepare($query);
+
+            $statement->bindParam(":cname", $cname);
+            $statement->bindParam(":race", $race);
+            $statement->bindParam(":class", $class);
+            $statement->bindParam(":background", $background);
+            $statement->bindParam(":notes", $notes);
+            $statement->bindParam(":userOwner", $_SESSION['loginid']);
+
+            $statement->execute();
+
+            $insertID = $db->lastInsertId();
+
+            $_SESSION['characterID'] = $insertID;
+
+
+            // Start of stats creation
             $query = "INSERT INTO stats (characterID, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints, notes) values (:characterID, :strength, :intelligence, :dexterity, :wisdom, :constitution, :charisma, :hitpoints, :notes)";
 
             $statement = $db->prepare($query);
@@ -89,7 +113,6 @@
             $statement->bindParam(":notes", $notes);
 
             $statement->execute();
-
         }
 
         if($_FILES['image']['size'] > 0 )
@@ -131,14 +154,7 @@
 
             if($image_upload_detected)
             {
-                include 'ImageResize.php';
-
                 $image_filename = $_FILES['image']['name'];
-                /* This doesnt work might fix later
-                $resize = new \Gumlet\ImageResize($image_filename);
-                $resize->resizeToWidth(300);
-                $resize->save($image_filename);
-                */
                 $temporary_image_path = $_FILES['image']['tmp_name'];
                 $new_image_path = file_upload_path($image_filename);
 
