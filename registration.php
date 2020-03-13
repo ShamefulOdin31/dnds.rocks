@@ -1,6 +1,10 @@
 <?php 
     require "connect.php";
 
+    include "utility.php";
+    $navbarLeft = navbarArray("l", $db);
+    $navbarRight = navbarArray("r", $db);
+
     $username = "";
     $password = "";
     $passwordConfirm = "";
@@ -127,64 +131,65 @@
 <body>
 <!-- Start of Nav -->
 <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
-    <a class="navbar-brand" href="index.php">Home</a>
+    <a class="navbar-brand" href="i<?= $navbarLeft[0]['navurl'] ?>"><?= $navbarLeft[0]['navItemName'] ?></a>
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-            <a class="nav-link" href="account.php?sort=name">Account</a>
+            <a class="nav-link" href="<?= $navbarLeft[1]['navurl'] ?>"><?= $navbarLeft[1]['navItemName'] ?></a>
         </li>
         <li class="nav-item">
             <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
-                <a class="nav-link" href="create.php">Create Character</a>
+                <a class="nav-link" href="<?= $navbarLeft[2]['navurl'] ?>"><?= $navbarLeft[2]['navItemName'] ?></a>
             <?php else :?>
-                <a class="nav-link disabled" href="create.php">Create Character</a>
+                <a class="nav-link disabled" href="<?= $navbarLeft[2]['navurl'] ?>"><?= $navbarLeft[2]['navItemName'] ?></a>
             <?php endif ?>
         </li>
     </ul>
     <ul class="navbar-nav ml-auto">
         <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
             <li class="nav-item">
-                <a class="nav-link" href="logout.php">Logout</a>
+                <a class="nav-link" href="<?= $navbarRight[0]['navurl'] ?>"><?= $navbarRight[0]['navItemName'] ?></a>
             </li>
         <?php else :?>
             <li class="nav-item">
-                <a class="nav-link" href="registration.php">Register</a>
+                <a class="nav-link" href="<?= $navbarRight[1]['navurl'] ?>"><?= $navbarRight[1]['navItemName'] ?></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="login.php">Login</a>
+                <a class="nav-link" href="<?= $navbarRight[2]['navurl'] ?>"><?= $navbarRight[2]['navItemName'] ?></a>
             </li>
         <?php endif ?>
     </ul>
 </nav>
-    <div class="container">
-        <h2>Register</h2>
-        <p>Fill out this form to create a account.</p>
-        <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
-            <div class="form-group">
-                <div class="col-md-5">
-                    <label>Username</label>
-                    <input class="form-control" type="text" name="username">
-                    <span class="help-block"><?= $userError ?></span>
-                </div>
+<!-- Start of content -->
+<div class="container">
+    <h2>Register</h2>
+    <p>Fill out this form to create a account.</p>
+    <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
+        <div class="form-group">
+            <div class="col-md-5">
+                <label>Username</label>
+                <input class="form-control" type="text" name="username">
+                <span class="help-block"><?= $userError ?></span>
             </div>
-            <div class="form-group">
-                <div class="col-md-5">
-                    <label>Password</label>
-                    <input class="form-control" type="password" name="password">
-                    <span class="help-block"><?= $passwordError ?></span>
-                </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-5">
+                <label>Password</label>
+                <input class="form-control" type="password" name="password">
+                <span class="help-block"><?= $passwordError ?></span>
             </div>
-            <div class="form-group">
-                <div class="col-md-5">
-                    <label>Confirm Password</label>
-                    <input class="form-control" type="password" name="confirm_password">
-                    <span class=help/block><?= $confirmError ?></span>
-                </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-5">
+                <label>Confirm Password</label>
+                <input class="form-control" type="password" name="confirm_password">
+                <span class=help/block><?= $confirmError ?></span>
             </div>
-            <div class="form-group">
-                <input class="btn btn-primary" type="submit" value="Submit">
-                <input class="btn btn-default" type="reset" value="Reset">
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-group">
+            <input class="btn btn-primary" type="submit" value="Submit">
+            <input class="btn btn-default" type="reset" value="Reset">
+        </div>
+    </form>
+</div>
 </body>
 </html>

@@ -23,25 +23,33 @@
         $query .= $sort["name"];
     }
 
-    if($_GET['sort'] == 'race')
+    elseif($_GET['sort'] == 'race')
     {
         $query .= $sort["race"];
     }
 
-    if($_GET['sort'] == 'class')
+    elseif($_GET['sort'] == 'class')
     {
         $query .= $sort["class"];
     }
 
-    if($_GET['sort'] == 'background')
+    elseif($_GET['sort'] == 'background')
     {
         $query .= $sort["background"];
+    }
+    else
+    {
+        header('HTTP/1.0 404 Not Found', true, 404);
     }
 
     $statement = $db->prepare($query);
     $statement->bindParam(":loginID", $_SESSION["loginid"]);
     $statement->execute();
     $dndCharacters = $statement->fetchAll();
+
+    include "utility.php";
+    $navbarLeft = navbarArray("l", $db);
+    $navbarRight = navbarArray("r", $db);
 
 ?>
 
@@ -61,30 +69,30 @@
 <body>
 <!-- Start of Nav -->
 <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
-    <a class="navbar-brand" href="index.php">Home</a>
+    <a class="navbar-brand" href="i<?= $navbarLeft[0]['navurl'] ?>"><?= $navbarLeft[0]['navItemName'] ?></a>
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-            <a class="nav-link" href="account.php?sort=name">Account</a>
+            <a class="nav-link" href="<?= $navbarLeft[1]['navurl'] ?>"><?= $navbarLeft[1]['navItemName'] ?></a>
         </li>
         <li class="nav-item">
             <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
-                <a class="nav-link" href="create.php">Create Character</a>
+                <a class="nav-link" href="<?= $navbarLeft[2]['navurl'] ?>"><?= $navbarLeft[2]['navItemName'] ?></a>
             <?php else :?>
-                <a class="nav-link disabled" href="create.php">Create Character</a>
+                <a class="nav-link disabled" href="<?= $navbarLeft[2]['navurl'] ?>"><?= $navbarLeft[2]['navItemName'] ?></a>
             <?php endif ?>
         </li>
     </ul>
     <ul class="navbar-nav ml-auto">
         <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
             <li class="nav-item">
-                <a class="nav-link" href="logout.php">Logout</a>
+                <a class="nav-link" href="<?= $navbarRight[0]['navurl'] ?>"><?= $navbarRight[0]['navItemName'] ?></a>
             </li>
         <?php else :?>
             <li class="nav-item">
-                <a class="nav-link" href="registration.php">Register</a>
+                <a class="nav-link" href="<?= $navbarRight[1]['navurl'] ?>"><?= $navbarRight[1]['navItemName'] ?></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="login.php">Login</a>
+                <a class="nav-link" href="<?= $navbarRight[2]['navurl'] ?>"><?= $navbarRight[2]['navItemName'] ?></a>
             </li>
         <?php endif ?>
     </ul>
