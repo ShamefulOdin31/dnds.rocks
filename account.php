@@ -129,6 +129,9 @@
                 <?php endforeach ?>
             </tbody>
         </table>
+        <div class="form-group">
+            <a class="btn btn-warning" href="resetpassword.php"> Reset your password</a>
+        </div>
     </div>
 </body>
 </html>

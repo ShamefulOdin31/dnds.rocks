@@ -1,16 +1,18 @@
 <?php
-require "connect.php";
-require "authenticate.php";
+	require "connect.php";
+	require "authenticate.php";
 
-session_start();
+	session_start();
 
-$userAccounts;
+	$_SESSION['adminLogedIn'] = true;
 
-$query = "SELECT loginid, username, timeCreated FROM logins";
+	$userAccounts;
 
-$statement = $db->prepare($query);
-$statement->execute();
-$userAccounts = $statement->fetchAll();
+	$query = "SELECT loginid, username, timeCreated FROM logins";
+
+	$statement = $db->prepare($query);
+	$statement->execute();
+	$userAccounts = $statement->fetchAll();
 
 	include "utility.php";
     $navbarLeft = navbarArray("l", $db);
@@ -35,7 +37,7 @@ $userAccounts = $statement->fetchAll();
 <body>
 <!-- Start of Nav -->
 <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
-    <a class="navbar-brand" href="i<?= $navbarLeft[0]['navurl'] ?>"><?= $navbarLeft[0]['navItemName'] ?></a>
+    <a class="navbar-brand" href="<?= $navbarLeft[0]['navurl'] ?>"><?= $navbarLeft[0]['navItemName'] ?></a>
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
             <a class="nav-link" href="<?= $navbarLeft[1]['navurl'] ?>"><?= $navbarLeft[1]['navItemName'] ?></a>
@@ -68,6 +70,7 @@ $userAccounts = $statement->fetchAll();
 	<div class="container">
 		<h1>Welcome Richard Schentag</h1>
 		<p>Below are all of the user accounts</p>
+		<a href="addAccount.php">Add Account</a>
 		<table class="table table-striped table-hover">
 			<thead class="thead-dark">
 				<tr>
@@ -84,6 +87,8 @@ $userAccounts = $statement->fetchAll();
 						<th scope="row"><?= $value['loginid'] ?></th>
 						<td><?= $value['username'] ?></td>
 						<td><?= $value['timeCreated'] ?></td>
+						<td><a href="updateAccount.php?id=<?= $value['loginid'] ?>">Update</a></td>
+						<td><a href="adminDelete.php?id=<?= $value['loginid'] ?>">Delete</a></td>
 					</tr>
 				<?php endforeach ?>
 			</tbody>

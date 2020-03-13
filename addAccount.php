@@ -1,9 +1,14 @@
 <?php 
     require "connect.php";
-
+    session_start();
     include "utility.php";
     $navbarLeft = navbarArray("l", $db);
     $navbarRight = navbarArray("r", $db);
+
+    if($_SESSION['adminLogedIn'] !== true || !isset($_SESSION['adminLogedIn']))
+    {
+        header("location: admin.php");
+    }
 
     $username = "";
     $password = "";
@@ -102,7 +107,7 @@
 
             if($statement->execute())
             {
-                header("location: login.php");
+                header("location: admin.php");
             }
 
             else
@@ -120,7 +125,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration</title>
+    <title>Admin Add Account</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
         crossorigin="anonymous">
@@ -131,7 +136,7 @@
 <body>
 <!-- Start of Nav -->
 <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
-    <a class="navbar-brand" href="<?= $navbarLeft[0]['navurl'] ?>"><?= $navbarLeft[0]['navItemName'] ?></a>
+    <a class="navbar-brand" href="i<?= $navbarLeft[0]['navurl'] ?>"><?= $navbarLeft[0]['navItemName'] ?></a>
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
             <a class="nav-link" href="<?= $navbarLeft[1]['navurl'] ?>"><?= $navbarLeft[1]['navItemName'] ?></a>
@@ -161,8 +166,8 @@
 </nav>
 <!-- Start of content -->
 <div class="container">
-    <h2>Register</h2>
-    <p>Fill out this form to create a account.</p>
+    <h2>Admin Add Account</h2>
+    <p>Fill out this form to create a user account.</p>
     <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
         <div class="form-group">
             <div class="col-md-5">

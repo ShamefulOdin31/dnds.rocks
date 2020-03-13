@@ -1,20 +1,27 @@
 <?php 
     require "connect.php";
-
+    session_start();
     include "utility.php";
     $navbarLeft = navbarArray("l", $db);
     $navbarRight = navbarArray("r", $db);
 
+    if($_SESSION['adminLogedIn'] !== true || !isset($_SESSION['adminLogedIn']))
+    {
+        header("location: admin.php");
+    }
+
     $username = "";
-    $password = "";
-    $passwordConfirm = "";
-
     $userError = "";
-    $passwordError = "";
-    $confirmError = "";
-
     $queryUser = "";
-    $queryPass = "";
+
+    $loginID = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+
+    $loadValue = "SELECT username FROM logins WHERE loginID = :id";
+    $statement = $db->prepare($loadValue);
+    $statement->bindParam(":id", $loginID);
+    $statement->execute();
+    $userFetch = $statement->fetchAll();
+    $_SESSION['loadUsername'] = $userFetch[0]['username'];
 
     if($_SERVER["REQUEST_METHOD"] == "POST")
     {
@@ -33,76 +40,35 @@
         {
             $query = "SELECT LoginID FROM Logins WHERE username = :username";
 
-            if($statement = $db->prepare($query))
-            {
-                $statement->bindParam(":username", $queryUser, PDO::PARAM_STR);
-            }
-            
+            $statement = $db->prepare($query);
+            $statement->bindParam(":username", $queryUser, PDO::PARAM_STR);
             $queryUser = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
             
-            if($statement->execute())
+            $statement->execute();
+            
+            if($statement->rowCount() == 1)
             {
-                if($statement->rowCount() == 1)
-                {
-                    $userError = "This username already exists";
-                }
-                else
-                {
-                    $username = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
-                }
+                $userError = "This username already exists";
             }
-
             else
             {
-                echo "Error";
-            }
-
-            unset($statement);
-        }
-
-        // Validating the first password.
-        if(empty(trim($_POST['password'])))
-        {
-            $passwordError = "Please enter a password";
-        }
-        else
-        {
-            $password = trim($_POST['password']);
-        }
-
-        // Validating the confirmation password.
-        if(empty(trim($_POST['confirm_password'])))
-        {
-            $confirmError = "Please enter a password";
-        }
-        else
-        {
-            $passwordConfirm = trim($_POST['confirm_password']);
-
-            // Checks to see if the password error is empty and to see if the password match
-            if(empty($passwordError) && ($password != $passwordConfirm))
-            {
-                $confirmError = "Password do not match";
+                $username = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
             }
         }
 
         // Checks to see if the error variables are empty
-        if(empty($userError) && empty($passwordError) && empty($confirmError))
+        if(empty($userError))
         {
-            $query = "INSERT INTO Logins (username, password) VALUES (:username, :password)";
+            $query = "UPDATE logins SET username = :username WHERE loginID = :loginID";
 
             $statement = $db->prepare($query);
             $statement->bindParam(":username", $queryUser);
-            $statement->bindParam(":password", $queryPass);
-
+            $statement->bindParam(":loginID", $loginID);
             $queryUser = $username;
-
-            // Hashes the password
-            $queryPass = password_hash($password, PASSWORD_DEFAULT, array('cost' => 9));
 
             if($statement->execute())
             {
-                header("location: login.php");
+                header("location: admin.php");
             }
 
             else
@@ -110,8 +76,6 @@
                 echo "Account registration failed.";
             }
         }
-
-        unset($db);
     }
 ?>
 
@@ -120,7 +84,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration</title>
+    <title>Admin Update Account</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
         crossorigin="anonymous">
@@ -161,28 +125,14 @@
 </nav>
 <!-- Start of content -->
 <div class="container">
-    <h2>Register</h2>
-    <p>Fill out this form to create a account.</p>
-    <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
+    <h2>Admin Update Account</h2>
+    <p>Fill out this form to update a user account.</p>
+    <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>?id=<?= $loginID ?>" method="post">
         <div class="form-group">
             <div class="col-md-5">
                 <label>Username</label>
-                <input class="form-control" type="text" name="username">
+                <input class="form-control" type="text" name="username" value="<?= $_SESSION['loadUsername'] ?>">
                 <span class="help-block"><?= $userError ?></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-5">
-                <label>Password</label>
-                <input class="form-control" type="password" name="password">
-                <span class="help-block"><?= $passwordError ?></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-5">
-                <label>Confirm Password</label>
-                <input class="form-control" type="password" name="confirm_password">
-                <span class=help/block><?= $confirmError ?></span>
             </div>
         </div>
         <div class="form-group">

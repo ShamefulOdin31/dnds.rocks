@@ -11,9 +11,6 @@
         header("location: index.php");
         exit;
     }
-
-    require "connect.php";
-
     $username = "";
     $password = "";
 
@@ -165,12 +162,9 @@
                 <input class="form-control" type="password" name="password">
                 <span class="help-block"><?= $passwordError ?></span>
             </div>
-            
         </div>
         <div class="form-group">
             <input class="btn btn-primary" type="submit" value="Login">
-            <a class="btn btn-warning" href="resetpassword.php"> Reset your password</a>
-
         </div>
     </form>
 </div>

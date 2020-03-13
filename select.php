@@ -14,15 +14,15 @@
 
     $queryResults;
 
-    $query = "SELECT cname, race, class, background, notes, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints FROM dndCharacters WHERE characterID = :characterID";
+    $query = "SELECT cname, race, class, background, notes, userOwner, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints FROM dndCharacters WHERE characterID = :characterID";
     $characterID = filter_input(INPUT_GET, 'characterID', FILTER_SANITIZE_NUMBER_INT);
-
 
     $statement = $db->prepare($query);
     $statement->bindParam(":characterID", $characterID);
     $statement->execute();
     $queryResults = $statement->fetchAll();
 
+    // For image Display
     $images = "SELECT uploadLocation FROM uploads WHERE characterID = :characterID";
     $statement3 = $db->prepare($images);
     $statement3->bindParam(":characterID", $characterID);
