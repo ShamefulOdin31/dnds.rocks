@@ -2,9 +2,55 @@
     require "connect.php";
     session_start();
 
-    include "utility.php";
-    $navbarLeft = navbarArray("l", $db);
-    $navbarRight = navbarArray("r", $db);
+    require "header.php";
+
+    $queryResults;
+
+    $query = "SELECT cname, race, class, background, notes, userOwner, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints, searchBy, username, characterID FROM dndCharacters 
+                JOIN logins  ON dndCharacters.userOwner = logins.loginID WHERE visibility = 'y'";
+
+    $sort = ["name" => " ORDER BY cname",
+    "race" => " ORDER BY race",
+    "class" => " ORDER BY class",
+    "background" => " ORDER BY background",
+    "owner" => "ORDER BY userOwner"];
+
+    if(isset($_GET['id']) && isset($_GET['type']))
+    {
+        if($_GET['id'] == '1' && $_GET['type'] == 'name')
+        {
+            $query .= $sort["name"];
+        }
+
+        elseif($_GET['id'] == '2' && $_GET['type'] == 'race')
+        {
+            $query .= $sort["race"];
+        }
+
+        elseif($_GET['id'] == '3' && $_GET['type'] == 'class')
+        {
+            $query .= $sort["class"];
+        }
+
+        elseif($_GET['id'] == '4' && $_GET['type'] == 'background')
+        {
+            $query .= $sort["background"];
+        }
+        elseif($_GET['id'] == '5' && $_GET['type'] == 'owner')
+        {
+            $query .= $sort["owner"];
+        }
+
+        else
+        {
+            http_response_code(404);
+            die();
+        }
+    }
+
+    $statement = $db->prepare($query);
+    $statement->execute();
+    $queryResults = $statement->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -22,36 +68,35 @@
 </head>
 <body>
 
+<!-- Start of content -->
+<div class="container">
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col"><a href="index.php?id=1&type=name">Name</a></th>
+                <th scope="col"><a href="index.php?id=2&type=race">Race</a></th>
+                <th scope="col"><a href="index.php?id=3&type=class">Class</a></th>
+                <th scope="col"><a href="index.php?id=4&type=background">Background</a></th>
+                <th scope="col">Notes</th>
+                <th scope="col"><a href="index.php?id=5&type=owner">Owner</a></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($queryResults as $key => $value) :?>
+                <tr>
+                    <th scope="row"><?= $value["cname"] ?></th>
+                    <td><?= $value['race'] ?></td>
+                    <td><?= $value['class'] ?></td>
+                    <td><?= $value['background'] ?></td>
+                    <td><?= $value['notes'] ?></td>
+                    <td><?= $value['username'] ?></td>
+                    <td><a href="select.php?characterID=<?= $value['characterID'] ?>&type=<?= str_replace(' ', '-', $value['searchBy']) ?>">Select</a></td>
+                </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+</div>
 
-<!-- Start of Nav -->
-<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
-    <a class="navbar-brand" href="i<?= $navbarLeft[0]['navurl'] ?>"><?= $navbarLeft[0]['navItemName'] ?></a>
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-            <a class="nav-link" href="<?= $navbarLeft[1]['navurl'] ?>"><?= $navbarLeft[1]['navItemName'] ?></a>
-        </li>
-        <li class="nav-item">
-            <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
-                <a class="nav-link" href="<?= $navbarLeft[2]['navurl'] ?>"><?= $navbarLeft[2]['navItemName'] ?></a>
-            <?php else :?>
-                <a class="nav-link disabled" href="<?= $navbarLeft[2]['navurl'] ?>"><?= $navbarLeft[2]['navItemName'] ?></a>
-            <?php endif ?>
-        </li>
-    </ul>
-    <ul class="navbar-nav ml-auto">
-        <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $navbarRight[0]['navurl'] ?>"><?= $navbarRight[0]['navItemName'] ?></a>
-            </li>
-        <?php else :?>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $navbarRight[1]['navurl'] ?>"><?= $navbarRight[1]['navItemName'] ?></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $navbarRight[2]['navurl'] ?>"><?= $navbarRight[2]['navItemName'] ?></a>
-            </li>
-        <?php endif ?>
-    </ul>
-</nav>
 </body>
 </html>

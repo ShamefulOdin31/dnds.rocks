@@ -7,7 +7,7 @@
 
     if($_SESSION['adminLogedIn'] !== true || !isset($_SESSION['adminLogedIn']))
     {
-        header("location: admin.php");
+        header("location: admin.php?id=1&type=name");
     }
 
     $loginID = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
@@ -22,5 +22,5 @@
     $statement->bindParam(":loginID", $loginID);
     $statement->execute();
 
-    header("location: admin.php");
+    header("location: admin.php?id=1&type=name");
 ?>

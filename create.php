@@ -1,11 +1,8 @@
 <?php 
     require "connect.php";
-
-    include "utility.php";
-    $navbarLeft = navbarArray("l", $db);
-    $navbarRight = navbarArray("r", $db);
-
     session_start();
+    require "header.php";
+    
     // Verifies that the user is logged in
     if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)
     {
@@ -18,7 +15,6 @@
     $raceError = "";
     $classError = "";
     $backgroundError = "";
-    $notesError = "";
     $searchError = "";
 
     // Gets and decodes the race data from the api
@@ -34,7 +30,6 @@
     $race = filter_input(INPUT_POST, 'races', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $class = filter_input(INPUT_POST, 'classes', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $background = filter_input(INPUT_POST, 'background', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $notes = filter_input(INPUT_POST, 'notes', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $search = filter_input(INPUT_POST, 'search', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
     if($_SERVER["REQUEST_METHOD"] == "POST")
@@ -59,10 +54,6 @@
             $backgroundError = "Please enter a valid background";
         }
 
-        if(empty(trim($notes)))
-        {
-            $notesError = "Please enter a valid background";
-        }
 
         if(empty(trim($search)))
         {
@@ -75,7 +66,6 @@
             $_SESSION['race'] = $race;
             $_SESSION['class'] = $class;
             $_SESSION['background'] = $background;
-            $_SESSION['notes'] = $notes;
             $_SESSION['search'] = str_replace(' ', '-',$search);
             
             header("location: stats.php");
@@ -100,7 +90,7 @@
 <body>
 <!-- Start of Nav -->
 <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
-    <a class="navbar-brand" href="i<?= $navbarLeft[0]['navurl'] ?>"><?= $navbarLeft[0]['navItemName'] ?></a>
+    <a class="navbar-brand" href="<?= $navbarLeft[0]['navurl'] ?>"><?= $navbarLeft[0]['navItemName'] ?></a>
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
             <a class="nav-link" href="<?= $navbarLeft[1]['navurl'] ?>"><?= $navbarLeft[1]['navItemName'] ?></a>
@@ -169,13 +159,6 @@
                     <label>Background</label>
                     <input type="text" name="background" class="form-control">
                     <span class="help-block"><?= $backgroundError ?></span>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-md-5">
-                    <label>Notes</label>
-                    <input type="textarea" name="notes" class="form-control">
-                    <span class="help-block"><?= $notesError ?></span>
                 </div>
             </div>
             <div class="form-group row">

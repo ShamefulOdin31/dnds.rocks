@@ -1,10 +1,7 @@
 <?php 
     require "connect.php";
     session_start();
-
-    include "utility.php";
-    $navbarLeft = navbarArray("l", $db);
-    $navbarRight = navbarArray("r", $db);
+    require "header.php";
 
     if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)
     {
@@ -29,7 +26,6 @@
     $race = $_SESSION['race'];
     $class = $_SESSION['class'];
     $background = $_SESSION['background'];
-    $notes = $_SESSION['notes'];
     $search = $_SESSION['search'];
 
     $strength = filter_input(INPUT_POST, 'strength', FILTER_SANITIZE_NUMBER_INT);
@@ -40,6 +36,7 @@
     $charisma = filter_input(INPUT_POST, 'charisma', FILTER_SANITIZE_NUMBER_INT);
     $hitPoints = filter_input(INPUT_POST, 'hitpoints', FILTER_SANITIZE_NUMBER_INT);
     $notes = filter_input(INPUT_POST, 'notes', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $visibility ="";
 
     if($_SERVER["REQUEST_METHOD"] === "POST")
     {
@@ -77,11 +74,20 @@
             $hitPointsError = "Please enter a valid HP";
         }
 
+        if(isset($_POST['visibility']))
+        {
+            $visibility = "y";
+        }
+        else
+        {
+            $visibility = "n";
+        }
+
         if(empty($strengthError) && empty($intelligenceError) && empty($dexterityError) && empty($wisdomError) && empty($constitutionError) && empty($charismaError))
         {
             // Character and stat creation
-            $query = "INSERT INTO dndcharacters (CName, Race, Class, Background, Notes, userOwner, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints, searchBy) 
-                values (:cname, :race, :class, :background, :notes, :userOwner, :strength, :intelligence, :dexterity, :wisdom, :constitution, :charisma, :hitpoints, :searchBy)";
+            $query = "INSERT INTO dndcharacters (CName, Race, Class, Background, Notes, userOwner, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints, visibility, searchBy) 
+                values (:cname, :race, :class, :background, :notes, :userOwner, :strength, :intelligence, :dexterity, :wisdom, :constitution, :charisma, :hitpoints, :visibility, :searchBy)";
 
             $statement = $db->prepare($query);
 
@@ -98,6 +104,7 @@
             $statement->bindParam(":constitution", $constitution);
             $statement->bindParam(":charisma", $charisma);
             $statement->bindParam(":hitpoints", $hitPoints);
+            $statement->bindParam(":visibility", $visibility);
             $statement->bindParam(":searchBy", $search);
 
             $statement->execute();
@@ -187,37 +194,6 @@
     <title>Stats</title>
 </head>
 <body>
-<!-- Start of Nav -->
-<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
-    <a class="navbar-brand" href="i<?= $navbarLeft[0]['navurl'] ?>"><?= $navbarLeft[0]['navItemName'] ?></a>
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-            <a class="nav-link" href="<?= $navbarLeft[1]['navurl'] ?>"><?= $navbarLeft[1]['navItemName'] ?></a>
-        </li>
-        <li class="nav-item">
-            <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
-                <a class="nav-link" href="<?= $navbarLeft[2]['navurl'] ?>"><?= $navbarLeft[2]['navItemName'] ?></a>
-            <?php else :?>
-                <a class="nav-link disabled" href="<?= $navbarLeft[2]['navurl'] ?>"><?= $navbarLeft[2]['navItemName'] ?></a>
-            <?php endif ?>
-        </li>
-    </ul>
-    <ul class="navbar-nav ml-auto">
-        <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $navbarRight[0]['navurl'] ?>"><?= $navbarRight[0]['navItemName'] ?></a>
-            </li>
-        <?php else :?>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $navbarRight[1]['navurl'] ?>"><?= $navbarRight[1]['navItemName'] ?></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $navbarRight[2]['navurl'] ?>"><?= $navbarRight[2]['navItemName'] ?></a>
-            </li>
-        <?php endif ?>
-    </ul>
-</nav>
-
 <!-- Start of form -->
 <div class="container">
     <h2>Enter your characters stats</h2>
@@ -277,6 +253,10 @@
                 <input type="text" class="form-control" name="notes">
                 <span class="help-block"></span>
             </div>
+        </div>
+        <div class="custom-control custom-checkbox mb-3">
+            <input type="checkbox" class="custom-control-input" id="customCheck" name="visibility" value="visibility">
+            <label class="custom-control-label" for="customCheck">Do you want your character to be publicly visible?</label>
         </div>
         <div class="input-group mb-3">
             <div class="input-group-prepend">

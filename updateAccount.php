@@ -1,79 +1,120 @@
 <?php 
     require "connect.php";
     session_start();
-    include "utility.php";
-    $navbarLeft = navbarArray("l", $db);
-    $navbarRight = navbarArray("r", $db);
+    require "header.php";
 
+    // Checks to see if the user accessing the page is a admin.
     if($_SESSION['adminLogedIn'] !== true || !isset($_SESSION['adminLogedIn']))
     {
-        header("location: admin.php");
+        header("location: admin.php?id=1&type=name");
     }
 
     $username = "";
+    $adminStatus = "";
+    $checked = "";
     $userError = "";
     $queryUser = "";
 
     $loginID = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 
-    $loadValue = "SELECT username FROM logins WHERE loginID = :id";
+    $loadValue = "SELECT username, loginID, adminStatus FROM logins WHERE loginID = :id";
     $statement = $db->prepare($loadValue);
     $statement->bindParam(":id", $loginID);
     $statement->execute();
     $userFetch = $statement->fetchAll();
     $_SESSION['loadUsername'] = $userFetch[0]['username'];
 
+    if(($userFetch[0]['adminStatus'] === 'y'))
+    {
+        $checked = 'checked = "checked"';
+    }
+    
+
     if($_SERVER["REQUEST_METHOD"] == "POST")
     {
-        // Validating the username
-        if(empty(trim($_POST['username'])))
-        {
-            $userError = "Please enter a email";
-        }
+        // Checks to see if the admin checkbox is checked.
 
-        elseif(!filter_input(INPUT_POST, 'username', FILTER_VALIDATE_EMAIL))
+        $username = filter_input(INPUT_POST, 'username', FILTER_VALIDATE_EMAIL);
+
+        if(isset($_POST['adminStatus']))
         {
-            $userError = "Please enter a valid email";
+            $adminStatus = "y";
         }
 
         else
         {
-            $query = "SELECT LoginID FROM Logins WHERE username = :username";
+            $adminStatus = "n";
+        }
 
-            $statement = $db->prepare($query);
-            $statement->bindParam(":username", $queryUser, PDO::PARAM_STR);
-            $queryUser = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
-            
-            $statement->execute();
-            
-            if($statement->rowCount() == 1)
+        //Checks to see if the just the admin check box is changed and nothing else.
+        if($username == $userFetch[0]['username'] && $loginID == $userFetch[0]['loginID'] && $userFetch[0]['admin'] != $adminStatus)
+        {
+            $adminUpdate = "UPDATE logins SET adminStatus = :adminStatus WHERE loginID = :loginID";
+
+            if($statementUpdate = $db->prepare($adminUpdate))
             {
-                $userError = "This username already exists";
-            }
-            else
-            {
-                $username = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+                $statementUpdate->bindParam(":adminStatus", $adminStatus);
+                $statementUpdate->bindParam(":loginID", $loginID);
+
+                if($statementUpdate->execute())
+                {
+                    header("location: admin.php?id=1&type=name");
+                }
             }
         }
 
-        // Checks to see if the error variables are empty
-        if(empty($userError))
+        // Checks to see if the username has changed and nothing else.
+        elseif($username != $userFetch[0]['username'] && $loginID == $userFetch[0]['loginID'] && $userFetch[0]['adminStatus'] == $adminStatus)
         {
-            $query = "UPDATE logins SET username = :username WHERE loginID = :loginID";
-
-            $statement = $db->prepare($query);
-            $statement->bindParam(":username", $queryUser);
-            $statement->bindParam(":loginID", $loginID);
-            $queryUser = $username;
-
-            if($statement->execute())
+            // Validating the username
+            if(empty(trim($_POST['username'])))
             {
-                header("location: admin.php");
+                $userError = "Please enter a email";
             }
 
-            else
+            elseif(!filter_input(INPUT_POST, 'username', FILTER_VALIDATE_EMAIL))
             {
-                echo "Account registration failed.";
+                $userError = "Please enter a valid email";
+            }
+
+            // Checks to see if the error variables are empty
+            if(empty($userError))
+            {
+                $query = "UPDATE logins SET username = :username WHERE loginID = :loginID";
+
+                if($statement = $db->prepare($query))
+                {
+                    $statement->bindParam(":username", $username);
+                    $statement->bindParam(":loginID", $loginID);
+
+                    if($statement->execute())
+                    {
+                        header("location: admin.php?id=1&type=name");
+                    }
+                    else
+                    {
+                        echo "Updating username failed";
+                    }
+                }
+                
+            }
+        }
+
+        //Checks to see if the username and the admin checkbox have changed.
+        elseif($username != $userFetch[0]['username'] && $loginID == $userFetch[0]['loginID'] && $userFetch[0]['adminStatus'] != $adminStatus)
+        {
+            $adminUpdate = "UPDATE logins SET username = :username, adminStatus = :adminStatus WHERE loginID = :loginID";
+
+            if($statementUpdate = $db->prepare($adminUpdate))
+            {
+                $statementUpdate->bindParam(":adminStatus", $adminStatus);
+                $statementUpdate->bindParam(":loginID", $loginID);
+                $statementUpdate->bindParam(":username", $username);
+
+                if($statementUpdate->execute())
+                {
+                    header("location: admin.php?id=1&type=name");
+                }
             }
         }
     }
@@ -93,36 +134,6 @@
         crossorigin="anonymous"></script>
 </head>
 <body>
-<!-- Start of Nav -->
-<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
-    <a class="navbar-brand" href="<?= $navbarLeft[0]['navurl'] ?>"><?= $navbarLeft[0]['navItemName'] ?></a>
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-            <a class="nav-link" href="<?= $navbarLeft[1]['navurl'] ?>"><?= $navbarLeft[1]['navItemName'] ?></a>
-        </li>
-        <li class="nav-item">
-            <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
-                <a class="nav-link" href="<?= $navbarLeft[2]['navurl'] ?>"><?= $navbarLeft[2]['navItemName'] ?></a>
-            <?php else :?>
-                <a class="nav-link disabled" href="<?= $navbarLeft[2]['navurl'] ?>"><?= $navbarLeft[2]['navItemName'] ?></a>
-            <?php endif ?>
-        </li>
-    </ul>
-    <ul class="navbar-nav ml-auto">
-        <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $navbarRight[0]['navurl'] ?>"><?= $navbarRight[0]['navItemName'] ?></a>
-            </li>
-        <?php else :?>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $navbarRight[1]['navurl'] ?>"><?= $navbarRight[1]['navItemName'] ?></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $navbarRight[2]['navurl'] ?>"><?= $navbarRight[2]['navItemName'] ?></a>
-            </li>
-        <?php endif ?>
-    </ul>
-</nav>
 <!-- Start of content -->
 <div class="container">
     <h2>Admin Update Account</h2>
@@ -133,6 +144,11 @@
                 <label>Username</label>
                 <input class="form-control" type="text" name="username" value="<?= $_SESSION['loadUsername'] ?>">
                 <span class="help-block"><?= $userError ?></span>
+            </div>
+            <p></p>
+            <div class="custom-control custom-checkbox mb-3">
+                <input type="checkbox" class="custom-control-input" id="customCheck" name="adminStatus" value="adminStatus"<?php echo $checked ?>>
+                <label class="custom-control-label" for="customCheck">Make Admin?</label>
             </div>
         </div>
         <div class="form-group">
