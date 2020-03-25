@@ -10,9 +10,8 @@
 	{
 		header("location: login.php");
 	}
-
+	// For the user accounts table.
 	$_SESSION['adminLogedIn'] = true;
-
 	$userAccounts;
 
 	$query = "SELECT loginid, username, timeCreated, adminStatus FROM logins";
@@ -21,6 +20,7 @@
 	$statement->execute();
 	$userAccounts = $statement->fetchAll();
 	
+	// For the character table.
 	$query = "SELECT characterID, cname, race, class, background, notes, userOwner, searchBy FROM dndCharacters";
 
     $sort = ["name" => " ORDER BY cname",
@@ -65,7 +65,13 @@
     $statement = $db->prepare($query);
     $statement->bindParam(":loginID", $_SESSION["loginid"]);
     $statement->execute();
-    $dndCharacters = $statement->fetchAll();
+	$dndCharacters = $statement->fetchAll();
+	
+	//For the categories table.
+	$categoriesQuery = "SELECT * FROM categories";
+	$catStatement = $db->prepare($categoriesQuery);
+	$catStatement->execute();
+	$catResults = $catStatement->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -87,6 +93,23 @@
 <!-- Start of content -->
 <div class="container">
 	<h1>Welcome Richard Schentag</h1>
+	<p>Categories</p>
+	<table class="table table-striped table-hover">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">Category ID</th>
+				<th scope="col">Name</th>
+				<th scope="col"></th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach($catResults as $key => $value) :?>
+				<th scope="row"><?= $value['categoryID'] ?></th>
+				<th><?= $value['name'] ?></th>
+			<?php endforeach?>
+		</tbody>
+	</table>
 	<p>Below are all of the user accounts</p>
 	<a href="addAccount.php">Add Account</a>
 	<table class="table table-striped table-hover">
