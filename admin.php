@@ -106,7 +106,8 @@
 		<tbody>
 			<?php foreach($catResults as $key => $value) :?>
 				<th scope="row"><?= $value['categoryID'] ?></th>
-				<th><?= $value['name'] ?></th>
+				<th><?= $value['catname'] ?></th>
+				<th><a href="editCategory.php?id=<?= $value['categoryID'] ?>&name=<?= $value['catname'] ?>">Select</a></th>
 			<?php endforeach?>
 		</tbody>
 	</table>
