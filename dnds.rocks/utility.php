@@ -1,4 +1,5 @@
-<?php 
+<?php   
+    // used for the header. 
     function navbarArray($side, $db)
     {
         if($side == "r")
