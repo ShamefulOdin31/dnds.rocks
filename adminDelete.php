@@ -1,9 +1,6 @@
 <?php 
     require "connect.php";
     session_start();
-    include "utility.php";
-    $navbarLeft = navbarArray("l", $db);
-    $navbarRight = navbarArray("r", $db);
 
     if($_SESSION['adminLogedIn'] !== true || !isset($_SESSION['adminLogedIn']))
     {
@@ -12,7 +9,7 @@
 
     $loginID = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 
-    $characterQuery = "DELETE FROM dndCharacters WHERE userOwner = :loginID";
+    $characterQuery = "DELETE FROM dndcharacters WHERE userOwner = :loginID";
     $statement = $db->prepare($query);
     $statement->bindParam(":loginID", $loginID);
     $statement->execute();

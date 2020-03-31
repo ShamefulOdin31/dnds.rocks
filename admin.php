@@ -1,15 +1,20 @@
 <?php
 	require "connect.php";
-	require "authenticate.php";
-
-	require "header.php";
+	//require "authenticate.php";
 
 	session_start();
+
+	if(!isset($_SESSION['loggedin']) || $_SESSION["loggedin"] !== true)
+    {
+        header("location: login.php");
+        exit;
+    }
 
 	if(!isset($_SESSION['admin']))
 	{
 		header("location: login.php");
 	}
+	
 	// For the user accounts table.
 	$_SESSION['adminLogedIn'] = true;
 	$userAccounts;
@@ -21,7 +26,7 @@
 	$userAccounts = $statement->fetchAll();
 	
 	// For the character table.
-	$query = "SELECT characterID, cname, race, class, background, notes, userOwner, searchBy FROM dndCharacters";
+	$query = "SELECT characterID, cname, race, class, background, notes, userOwner, searchBy FROM dndcharacters";
 
     $sort = ["name" => " ORDER BY cname",
              "race" => " ORDER BY race",
@@ -90,10 +95,12 @@
 </head>
 
 <body>
+	<?php require "header.php"?>
 <!-- Start of content -->
 <div class="container">
 	<h1>Welcome Richard Schentag</h1>
-	<p>Categories</p>
+	<h5>Categories</h5>
+	<a href="createCategories.php">Create Categories</a>
 	<table class="table table-striped table-hover">
 		<thead class="thead-dark">
 			<tr>
@@ -105,13 +112,16 @@
 		</thead>
 		<tbody>
 			<?php foreach($catResults as $key => $value) :?>
-				<th scope="row"><?= $value['categoryID'] ?></th>
-				<th><?= $value['catname'] ?></th>
-				<th><a href="editCategory.php?id=<?= $value['categoryID'] ?>&name=<?= $value['catname'] ?>">Select</a></th>
+				<tr>
+					<th scope="row"><?= $value['categoryID'] ?></th>
+					<th><?= $value['catname'] ?></th>
+					<th><a href="editCategory.php?categoryID=<?= $value['categoryID'] ?>&name=<?= $value['catname'] ?>">Edit</a></th>
+					<th></th>
+				</tr>
 			<?php endforeach?>
 		</tbody>
 	</table>
-	<p>Below are all of the user accounts</p>
+	<h5>Below are all of the user accounts</h5>
 	<a href="addAccount.php">Add Account</a>
 	<table class="table table-striped table-hover">
 		<thead class="thead-dark">
@@ -135,7 +145,7 @@
 			<?php endforeach ?>
 		</tbody>
 	</table>
-	<p>Below are all characters from all users</p>
+	<h5>Below are all characters from all users</h5>
 	<table class="table table-striped table-hover">
 	<thead class="thead-dark">
 		<tr>

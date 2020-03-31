@@ -1,7 +1,7 @@
 <?php 
     require "connect.php";
     session_start();
-    require "header.php";
+    
 
     if($_SESSION['adminLogedIn'] !== true || !isset($_SESSION['adminLogedIn']))
     {
@@ -34,7 +34,7 @@
 
         else
         {
-            $query = "SELECT LoginID FROM Logins WHERE username = :username";
+            $query = "SELECT LoginID FROM logins WHERE username = :username";
 
             if($statement = $db->prepare($query))
             {
@@ -92,7 +92,7 @@
         // Checks to see if the error variables are empty
         if(empty($userError) && empty($passwordError) && empty($confirmError))
         {
-            $query = "INSERT INTO Logins (username, password) VALUES (:username, :password)";
+            $query = "INSERT INTO logins (username, password) VALUES (:username, :password)";
 
             $statement = $db->prepare($query);
             $statement->bindParam(":username", $queryUser);
@@ -133,6 +133,7 @@
 </head>
 <body>
 <!-- Start of content -->
+<?php require "header.php"?>
 <div class="container">
     <h2>Admin Add Account</h2>
     <p>Fill out this form to create a user account.</p>

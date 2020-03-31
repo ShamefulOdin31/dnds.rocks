@@ -1,7 +1,7 @@
 <?php 
     require "connect.php";
     session_start();
-    require "header.php";
+    
     
     // Verifies that the user is logged in
     if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)
@@ -35,7 +35,7 @@
     $race = filter_input(INPUT_POST, 'races', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $class = filter_input(INPUT_POST, 'classes', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $background = filter_input(INPUT_POST, 'background', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $search = filter_input(INPUT_POST, 'search', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $search = filter_input(INPUT_POST, 'searchBy', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
     if($_SERVER["REQUEST_METHOD"] == "POST")
     {
@@ -71,7 +71,7 @@
             $_SESSION['race'] = $race;
             $_SESSION['class'] = $class;
             $_SESSION['background'] = $background;
-            $_SESSION['search'] = str_replace(' ', '-',$search);
+            $_SESSION['searchBy'] = str_replace(' ', '-',$search);
             
             header("location: stats.php");
         }
@@ -94,6 +94,7 @@
 </head>
 <body>
 <!-- Start of content -->
+<?php require "header.php"?>
     <div class="container">
         <h2>Create a character</h2>
         <p>Fill out the form to create a character</p>
@@ -138,10 +139,10 @@
             </div>
             <div class="form-group row">
                 <div class="col-md-5">
-                    <label for="search">Search By</label>
+                    <label for="searchBy">Categories</label>
                     <select name="searchBy" id="searchBy" class="form-control">
                         <?php foreach($categoriesResults as $key => $value) :?>
-                            <option value="<?= $value['name'] ?>"><?= $value['name'] ?></option>
+                            <option value="<?= $value['catname'] ?>"><?= $value['catname'] ?></option>
                         <?php endforeach?>
                     </select>
                 </div>

@@ -1,8 +1,7 @@
 <?php 
     require "connect.php";
-	require "authenticate.php";
 
-	require "header.php";
+	
 
     session_start();
 
@@ -12,7 +11,7 @@
     $search = "%" . $search . "%";
 
 
-    $query = "SELECT * FROM dndCharacters WHERE searchBy LIKE :search";
+    $query = "SELECT * FROM dndcharacters WHERE searchBy LIKE :search";
 
     if($statement = $db->prepare($query))
     {
@@ -39,6 +38,8 @@
         crossorigin="anonymous"></script>
 </head>
 <body>
+<?php require "header.php"?>
+<?php require "searchBar.php"?>
 <div class="container">
     <table class="table table-striped table-hover">
         <thead class="thead-dark">

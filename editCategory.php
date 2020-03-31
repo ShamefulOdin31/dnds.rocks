@@ -1,44 +1,34 @@
 <?php 
     require "connect.php";
     session_start();
-    require "header.php";
 
-    $name = filter_input(INPUT_GET, "name", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-
+    $categoryID = filter_input(INPUT_GET, 'categoryID', FILTER_SANITIZE_NUMBER_INT);
+    $catname = filter_input(INPUT_GET, "name", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    
     $nameError = "";
-
-    //For the categories table.
-	$categoriesQuery = "SELECT * FROM categories WHERE categoryID = :categoryID && catname = :catname";
-    $catStatement = $db->prepare($categoriesQuery);
-    $catStatement->bindParam(":catname", $name);
-    $catStatement->bindParam(":categoryID", $id);
-	$catStatement->execute();
-    $catResults = $catStatement->fetchAll();
     
     if($_SERVER["REQUEST_METHOD"] == "POST")
     {
-        $newName = filter_input(INPUT_POST, "newName", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if(empty(trim($newName)))
+        $newCatName = filter_input(INPUT_POST, "newCatName", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if(empty(trim($newCatName)))
         {
             $nameError = "Name box is empty";
         }
 
         if(empty($nameError))
         {
-            $query = "UPDATE categories SET catname = :catname WHERE categoryID = :id";
+            $query = "UPDATE categories SET catname = :newCatName WHERE categoryID = :categoryID";
 
             if($statement = $db->prepare($query))
             {
                 
-                $statement->bindParam(":catname", $newName);
-                $statement->bindParam(":id", $id);
+                $statement->bindParam(":newCatName", $newCatName);
+                $statement->bindParam(":categoryID", $categoryID);
+                
 
                 if($statement->execute())
                 {
-                    //header("location: admin.php");
-                    echo $newName;
-                    echo $_GET['id'];
+                    header("location: admin.php");
                 }
             }
         }
@@ -60,13 +50,14 @@
         crossorigin="anonymous"></script>
 </head>
 <body>
+    <?php require "header.php"?>
     <div class="container">
         <h2>Edit Categories</h2>
-        <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
+        <form method="post">
             <div class="form-group row">
                 <div class="col-md-5">
                     <label>Name</label>
-                    <input type="text" class="form-control" name="newName" value="<?= $name ?>">
+                    <input type="text" class="form-control" name="newCatName" value="<?= $catname ?>">
                     <span class="help-block"><?= $nameError ?></span>
                 </div>
             </div>

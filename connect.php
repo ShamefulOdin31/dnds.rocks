@@ -3,7 +3,9 @@
     define('DB_USER', 'serveruser2');
     define('DB_PASS','richard');
 
-    // password is password for phpmyadmin additional user
+    // login for first phpmyadmin login screen it
+    // Username: serveruser2
+    // Password: password
     try
     {
         $db = new PDO(DB_DSN, DB_USER, DB_PASS);

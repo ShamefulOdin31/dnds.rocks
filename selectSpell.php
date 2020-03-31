@@ -1,6 +1,5 @@
 <?php 
     require "connect.php";
-    require "header.php";
     
     $spellsJSON = file_get_contents("http://dnd5eapi.co/api/spells/" . $_GET['url']);
     $spellsOutput = json_decode($spellsJSON, true);
@@ -35,6 +34,8 @@
 		crossorigin="anonymous"></script>
 </head>
 <body>
+<?php require "header.php"?>
+<?php require "searchBar.php"?>
 <!-- Start of content -->
 <div class="container">
     <h2><?= $spellsOutput['name'] ?></h2>

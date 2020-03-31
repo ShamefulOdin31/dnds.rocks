@@ -2,12 +2,12 @@
     require "connect.php";
     session_start();
 
-    require "header.php";
+    
 
     $queryResults;
 
-    $query = "SELECT cname, race, class, background, notes, userOwner, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints, searchBy, username, characterID FROM dndCharacters 
-                JOIN logins  ON dndCharacters.userOwner = logins.loginID WHERE visibility = 'y'";
+    $query = "SELECT cname, race, class, background, notes, userOwner, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints, searchBy, username, characterID FROM dndcharacters 
+                JOIN logins  ON dndcharacters.userOwner = logins.loginID WHERE visibility = 'y'";
 
     $sort = ["name" => " ORDER BY cname",
     "race" => " ORDER BY race",
@@ -67,7 +67,8 @@
         crossorigin="anonymous"></script>
 </head>
 <body>
-
+<?php require "header.php"?>
+<?php require "searchbar.php"?>
 <!-- Start of content -->
 <div class="container">
     <table class="table table-striped table-hover">

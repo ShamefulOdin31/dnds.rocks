@@ -1,6 +1,5 @@
 <?php 
     require "connect.php";
-    require "header.php";
 
     $username = "";
     $password = "";
@@ -29,7 +28,7 @@
 
         else
         {
-            $query = "SELECT LoginID FROM Logins WHERE username = :username";
+            $query = "SELECT LoginID FROM logins WHERE username = :username";
 
             if($statement = $db->prepare($query))
             {
@@ -87,7 +86,7 @@
         // Checks to see if the error variables are empty
         if(empty($userError) && empty($passwordError) && empty($confirmError))
         {
-            $query = "INSERT INTO Logins (username, password, adminStatus) VALUES (:username, :password, :adminStatus)";
+            $query = "INSERT INTO logins (username, password, adminStatus) VALUES (:username, :password, :adminStatus)";
 
             $statement = $db->prepare($query);
             $statement->bindParam(":username", $queryUser);
@@ -128,6 +127,7 @@
         crossorigin="anonymous"></script>
 </head>
 <body>
+<?php require "header.php"?>
 <!-- Start of content -->
 <div class="container">
     <h2>Register</h2>
@@ -135,7 +135,7 @@
     <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
         <div class="form-group">
             <div class="col-md-5">
-                <label>Username</label>
+                <label>Email</label>
                 <input class="form-control" type="text" name="username">
                 <span class="help-block"><?= $userError ?></span>
             </div>

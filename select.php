@@ -1,11 +1,10 @@
 <?php 
     require "connect.php";
     session_start();
-    require "header.php";
 
     $queryResults;
 
-    $query = "SELECT cname, race, class, background, notes, userOwner, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints, searchBy FROM dndCharacters WHERE characterID = :characterID && searchBy = :search";
+    $query = "SELECT cname, race, class, background, notes, userOwner, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints, searchBy FROM dndcharacters WHERE characterID = :characterID && searchBy = :search";
     $characterID = filter_input(INPUT_GET, 'characterID', FILTER_SANITIZE_NUMBER_INT);
     $search = filter_input(INPUT_GET, 'type', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
@@ -44,6 +43,8 @@
         crossorigin="anonymous"></script>
 </head>
 <body>
+<?php require "header.php"?>
+<?php require "searchBar.php"?>
 <!-- Start of content -->
 <div class="container">
     <h2>Character Details</h2>
@@ -128,7 +129,6 @@
     </div>
     <div class="row">
         <div class="col">
-            <img src="C:\xampp\htdocs\webdevproject\uploads\Warframe0001.jpg" alt="">
             <?php foreach($uploadResults as $key => $value) :?>
                 <img src="<?= $value?>" alt="">
                 <p>test</p>

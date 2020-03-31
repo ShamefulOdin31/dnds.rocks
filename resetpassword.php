@@ -1,7 +1,6 @@
 <?php 
     require "connect.php";
     session_start();
-    require "header.php";
 
     if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)
     {
@@ -45,7 +44,7 @@
         // Checks to see if the error varibles are empty
         if(empty($passError) && empty($confirmError))
         {
-            $query = "UPDATE Logins SET password = :password WHERE loginID = :loginID";
+            $query = "UPDATE logins SET password = :password WHERE loginID = :loginID";
 
             if($statement = $db->prepare($query))
             {
@@ -88,6 +87,7 @@
         crossorigin="anonymous"></script>
 </head>
 <body>
+<?php require "header.php" ?>
 <!--  Start of content -->
     <div class="container">
         <h2>Reset Password</h2>

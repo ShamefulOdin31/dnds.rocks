@@ -1,9 +1,6 @@
 <?php 
     require "connect.php";
     session_start();
-
-    require "header.php";
-
     $dndCharacters;
 
     if(!isset($_SESSION['loggedin']) || $_SESSION["loggedin"] !== true)
@@ -12,7 +9,7 @@
         exit;
     }
 
-    $query = "SELECT characterID, cname, race, class, background, notes, searchBy FROM dndCharacters WHERE userOwner = :loginID";
+    $query = "SELECT characterID, cname, race, class, background, notes, searchBy FROM dndcharacters WHERE userOwner = :loginID";
 
     $sort = ["name" => " ORDER BY cname",
              "race" => " ORDER BY race",
@@ -65,6 +62,8 @@
         crossorigin="anonymous"></script>
 </head>
 <body>
+<?php require "header.php" ?>
+<?php require "searchBar.php"?>
 <!-- Start of content -->
 <div class="container">
     <h1>Welcome <?= htmlspecialchars($_SESSION["username"]) ?></h1>
@@ -92,6 +91,7 @@
                     <td><?= $value['notes'] ?></td>
                     <td><a href="select.php?characterID=<?= $value['characterID'] ?>&type=<?= str_replace(' ', '-', $value['searchBy']) ?>">Select</a></td>
                     <td><a href="spells.php?characterID=<?= $value['characterID'] ?>&type=<?= str_replace(' ', '-', $value['searchBy']) ?>">Spells</a></td>
+                    <td><a href="editCharacter.php?characterID=<?= $value['characterID'] ?>$type=<?= str_replace(' ', '-', $value['searchBy']) ?>">Edit</a></td>
                 </tr>
             <?php endforeach ?>
         </tbody>

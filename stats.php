@@ -1,7 +1,6 @@
 <?php 
     require "connect.php";
     session_start();
-    require "header.php";
 
     if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)
     {
@@ -26,7 +25,7 @@
     $race = $_SESSION['race'];
     $class = $_SESSION['class'];
     $background = $_SESSION['background'];
-    $search = $_SESSION['search'];
+    $search = $_SESSION['searchBy'];
 
     $strength = filter_input(INPUT_POST, 'strength', FILTER_SANITIZE_NUMBER_INT);
     $intelligence = filter_input(INPUT_POST, 'intelligence', FILTER_SANITIZE_NUMBER_INT);
@@ -194,6 +193,7 @@
     <title>Stats</title>
 </head>
 <body>
+<?php require "header.php"?>
 <!-- Start of form -->
 <div class="container">
     <h2>Enter your characters stats</h2>
@@ -260,7 +260,7 @@
         </div>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text" id="image">Upload</span>
+                <span class="input-group-text" id="upload">Upload</span>
             </div>
             <div class="custom-file">
                 <input type="file" class="custom-file-input" id="image" aria-describedby="image" name="image">

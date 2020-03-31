@@ -1,7 +1,6 @@
 <?php 
     require "connect.php";
     session_start();
-    require "header.php";
 
     if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true)
     {
@@ -44,7 +43,7 @@
         // Checks to see if the error variables are empty
         if(empty($userError) && empty($passwordError))
         {
-            $query = "SELECT loginID, username, password, adminStatus FROM Logins WHERE username = :username";
+            $query = "SELECT loginID, username, password, adminStatus FROM logins WHERE username = :username";
 
             if($statement = $db->prepare($query))
             {
@@ -116,6 +115,7 @@
         crossorigin="anonymous"></script>
 </head>
 <body>
+<?php require "header.php"?>
 <!-- Start of content-->
 <div class="container">  
     <h2>Login</h2>

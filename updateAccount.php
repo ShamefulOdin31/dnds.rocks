@@ -1,7 +1,6 @@
 <?php 
     require "connect.php";
     session_start();
-    require "header.php";
 
     // Checks to see if the user accessing the page is a admin.
     if($_SESSION['adminLogedIn'] !== true || !isset($_SESSION['adminLogedIn']))
@@ -26,7 +25,7 @@
 
     if(($userFetch[0]['adminStatus'] === 'y'))
     {
-        $checked = 'checked = "checked"';
+        $checked = ' checked = "checked"';
     }
     
 
@@ -134,6 +133,8 @@
         crossorigin="anonymous"></script>
 </head>
 <body>
+<?php require "header.php"?>
+<?php require "searchBar.php"?>
 <!-- Start of content -->
 <div class="container">
     <h2>Admin Update Account</h2>
