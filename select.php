@@ -64,7 +64,7 @@
 <div class="container">
     <h2>Character Details</h2>
     <div class="row">
-        <div class="col">
+        <div class="col col-md-9">
             <table class="table table-striped table-hover">
                 <thead class="thead-dark">
                     <tr>
