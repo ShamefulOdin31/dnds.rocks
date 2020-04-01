@@ -6,8 +6,11 @@
 
     $queryResults;
 
-    $query = "SELECT cname, race, class, background, notes, userOwner, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints, searchBy, username, characterID FROM dndcharacters 
-                JOIN logins  ON dndcharacters.userOwner = logins.loginID WHERE visibility = 'y'";
+    $query = "SELECT cname, race, class, background, notes, userOwner, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints, searchBy, username, characterID 
+                FROM dndcharacters 
+                JOIN logins  
+                ON dndcharacters.userOwner = logins.loginID 
+                WHERE visibility = 'y'";
 
     $sort = ["name" => " ORDER BY cname",
     "race" => " ORDER BY race",
