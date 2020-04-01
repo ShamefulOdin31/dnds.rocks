@@ -9,7 +9,7 @@
         exit;
     }
 
-    $query = "SELECT characterID, cname, race, class, background, notes, searchBy FROM dndcharacters WHERE userOwner = :loginID";
+    $query = "SELECT * FROM dndcharacters WHERE userOwner = :loginID";
 
     $sort = ["name" => " ORDER BY cname",
              "race" => " ORDER BY race",
@@ -91,7 +91,7 @@
                     <td><?= $value['notes'] ?></td>
                     <td><a href="select.php?characterID=<?= $value['characterID'] ?>&type=<?= str_replace(' ', '-', $value['searchBy']) ?>">Select</a></td>
                     <td><a href="spells.php?characterID=<?= $value['characterID'] ?>&type=<?= str_replace(' ', '-', $value['searchBy']) ?>">Spells</a></td>
-                    <td><a href="editCharacter.php?characterID=<?= $value['characterID'] ?>$type=<?= str_replace(' ', '-', $value['searchBy']) ?>">Edit</a></td>
+                    <td><a href="editCharacter.php?characterID=<?= $value['characterID'] ?>&type=<?= str_replace(' ', '-', $value['searchBy']) ?>">Edit</a></td>
                 </tr>
             <?php endforeach ?>
         </tbody>
