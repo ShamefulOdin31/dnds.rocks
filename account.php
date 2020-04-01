@@ -3,44 +3,55 @@
     session_start();
     $dndCharacters;
 
+    $query = "SELECT * FROM dndcharacters WHERE userOwner = :loginID";
+
     if(!isset($_SESSION['loggedin']) || $_SESSION["loggedin"] !== true)
     {
         header("location: login.php");
         exit;
     }
 
-    $query = "SELECT * FROM dndcharacters WHERE userOwner = :loginID";
+    if(!isset($_GET['id']) && !isset($_GET['type']))
+    {
+        header("location: account.php?id=1&type=name");
+    }
 
-    $sort = ["name" => " ORDER BY cname",
+    else
+    {
+        $sort = ["name" => " ORDER BY cname",
              "race" => " ORDER BY race",
              "class" => " ORDER BY class",
              "background" => " ORDER BY background"];
 
 
-    if($_GET['id'] == '1' && $_GET['type'] == 'name')
-    {
-        $query .= $sort["name"];
-    }
+        if($_GET['id'] == '1' && $_GET['type'] == 'name')
+        {
+            $query .= $sort["name"];
+        }
 
-    elseif($_GET['id'] == '2' && $_GET['type'] == 'race')
-    {
-        $query .= $sort["race"];
-    }
+        elseif($_GET['id'] == '2' && $_GET['type'] == 'race')
+        {
+            $query .= $sort["race"];
+        }
 
-    elseif($_GET['id'] == '3' && $_GET['type'] == 'class')
-    {
-        $query .= $sort["class"];
-    }
+        elseif($_GET['id'] == '3' && $_GET['type'] == 'class')
+        {
+            $query .= $sort["class"];
+        }
 
-    elseif($_GET['id'] == '4' && $_GET['type'] == 'background')
-    {
-        $query .= $sort["background"];
+        elseif($_GET['id'] == '4' && $_GET['type'] == 'background')
+        {
+            $query .= $sort["background"];
+        }
+        else
+        {
+            http_response_code(404);
+            die();
+        }
     }
-    else
-    {
-        http_response_code(404);
-        die();
-    }
+    
+
+    
 
     $statement = $db->prepare($query);
     $statement->bindParam(":loginID", $_SESSION["loginid"]);
