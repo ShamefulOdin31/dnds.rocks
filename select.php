@@ -8,6 +8,8 @@
     $characterID = filter_input(INPUT_GET, 'characterID', FILTER_SANITIZE_NUMBER_INT);
     $search = filter_input(INPUT_GET, 'type', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
+    $_SESSION['type'] = $search;
+
     //Verifies that the get url is consistant with the db
     $statement = $db->prepare($query);
     $statement->bindParam(":characterID", $characterID);
@@ -20,6 +22,19 @@
         http_response_code(404);
         die();
     }
+
+    //For spell Display
+    $spellQuery = "SELECT * FROM spells WHERE characterID = :characterID";
+    if($spellStatement = $db->prepare($spellQuery))
+    {
+        $spellStatement->bindParam(":characterID", $characterID);
+
+        if($spellStatement->execute())
+        {
+            $spellResults = $spellStatement->fetchAll();
+        }
+    }
+
 
     // For image Display
     $images = "SELECT uploadLocation FROM uploads WHERE characterID = :characterID";
@@ -34,7 +49,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Details</title>
+    <title>Character Details</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
         crossorigin="anonymous">
@@ -123,6 +138,28 @@
                             <th scope="col"><?= $value['hitpoints'] ?></th>
                         <?php endforeach ?>
                     </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Spell Name</th>
+                        <th scope="col">Level</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($spellResults as $key => $value):?>
+                        <tr>
+                            <th scope="row"><?= $value['spellName'] ?></th>
+                            <th scope="row"><?= $value['spellLevel'] ?></th>
+                            <td><a href="selectspell.php?url=<?= $value['spellIndex'] ?>">Select</a></td>
+                        </tr>
+                    <?php endforeach?>
                 </tbody>
             </table>
         </div>

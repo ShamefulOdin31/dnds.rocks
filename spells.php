@@ -3,12 +3,15 @@
     session_start();
 
     $characterID = filter_input(INPUT_GET, 'characterID', FILTER_SANITIZE_NUMBER_INT);
-    $characterName = str_replace('-', ' ', filter_input(INPUT_GET, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+    $search = filter_input(INPUT_GET, 'type', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+    $_SESSION['type'] = $search;
 
     //Verifies that the get url is consistant with the db
-    $query = "SELECT cname, race, class, background, notes, userOwner, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints, searchBy FROM dndcharacters WHERE characterID = :characterID && searchBy = :search";
-    $characterID = filter_input(INPUT_GET, 'characterID', FILTER_SANITIZE_NUMBER_INT);
-    $search = filter_input(INPUT_GET, 'type', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $query = "SELECT cname, race, class, background, notes, userOwner, searchBy 
+                FROM dndcharacters 
+                WHERE characterID = :characterID && searchBy = :search";
+    
 
     //Verifies that the get url is consistant with the db
     $statement = $db->prepare($query);
@@ -33,6 +36,10 @@
     {
         array_push($spellDefinitions, ($spellApi . $value['url']));
     }
+
+    // For setting the add button
+    
+    
 ?>
 
 <!DOCTYPE html>
