@@ -73,7 +73,7 @@
             <?php foreach ($spellsOutput['results'] as $key => $value) :?>
                 <tr>
                     <td> <?= $value['name'] ?></td>
-                    <td><a href="selectspell.php?url=<?= $value['index'] ?>">Select</a></td>
+                    <td><a href="selectSpell.php?url=<?= $value['index'] ?>">Select</a></td>
                     <td><a href="addSpells.php?id=<?= $characterID ?>&type=<?= $value['index'] ?>">Add</a></td>
                 </tr>
             <?php endforeach ?>
