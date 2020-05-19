@@ -93,11 +93,8 @@
                 {
                     echo "Error";
                 }
-
-                unset($statement);
             }
         }
-        unset($db);
     }
 ?>
 
@@ -116,6 +113,7 @@
 </head>
 <body>
 <?php require "header.php"?>
+<?php require "searchBar.php"?>
 <!-- Start of content-->
 <div class="container">  
     <h2>Login</h2>
@@ -123,7 +121,7 @@
     <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
         <div class="form-group row">
             <div class="col-md-5">
-                <label>Username</label>
+                <label>Email Address</label>
                 <input class="form-control" type="text" name="username">
                 <span class="help-block"><?= $userError ?></span>
             </div>
