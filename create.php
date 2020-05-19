@@ -95,6 +95,7 @@
 <body>
 <!-- Start of content -->
 <?php require "header.php"?>
+<?php require "searchBar.php"?>
     <div class="container">
         <h2>Create a character</h2>
         <p>Fill out the form to create a character</p>

@@ -194,6 +194,7 @@
 </head>
 <body>
 <?php require "header.php"?>
+<?php require "searchBar.php"?>
 <!-- Start of form -->
 <div class="container">
     <h2>Enter your characters stats</h2>

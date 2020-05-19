@@ -134,6 +134,7 @@
 <body>
 <!-- Start of content -->
 <?php require "header.php"?>
+<?php require "searchBar.php"?>
 <div class="container">
     <h2>Admin Add Account</h2>
     <p>Fill out this form to create a user account.</p>
