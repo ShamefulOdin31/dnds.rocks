@@ -57,6 +57,17 @@
     $statement->bindParam(":loginID", $_SESSION["loginid"]);
     $statement->execute();
     $dndCharacters = $statement->fetchAll();
+
+    if($_SERVER["REQUEST_METHOD"] == "POST")
+    {
+        $type = filter_input(INPUT_POST, "type", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $search = filter_input(INPUT_POST, "search", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        $_SESSION['searchType'] = $type;
+        $_SESSION['search'] = $search;
+
+        header("location: search.php");
+    }
 ?>
 
 <!DOCTYPE html>
