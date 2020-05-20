@@ -4,7 +4,7 @@
     $navbarRight = navbarArray("r", $db);
 ?>
 
-<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+<nav class="navbar navbar-expand-sm bg-light navbar-light">
     <a class="navbar-brand" href="<?= $navbarLeft[0]['navurl'] ?>"><?= $navbarLeft[0]['navItemName'] ?></a>
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
