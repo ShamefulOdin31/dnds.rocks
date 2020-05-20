@@ -96,7 +96,6 @@
                 <th scope="col"><a href="account.php?id=2&type=race">Race</a></th>
                 <th scope="col"><a href="account.php?id=3&type=class">Class</a></th>
                 <th scope="col"><a href="account.php?id=4&type=background">Background</a></th>
-                <th scope="col">Notes</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
@@ -110,7 +109,6 @@
                     <td><?= $value['race'] ?></td>
                     <td><?= $value['class'] ?></td>
                     <td><?= $value['background'] ?></td>
-                    <td><?= $value['notes'] ?></td>
                     <td><a href="select.php?characterID=<?= $value['characterID'] ?>&type=<?= str_replace(' ', '-', $value['searchBy']) ?>">Select</a></td>
                     <td><a href="spells.php?characterID=<?= $value['characterID'] ?>&type=<?= str_replace(' ', '-', $value['searchBy']) ?>">Spells</a></td>
                     <td><a href="editCharacter.php?characterID=<?= $value['characterID'] ?>&type=<?= str_replace(' ', '-', $value['searchBy']) ?>">Edit</a></td>
