@@ -85,8 +85,8 @@
         if(empty($strengthError) && empty($intelligenceError) && empty($dexterityError) && empty($wisdomError) && empty($constitutionError) && empty($charismaError))
         {
             // Character and stat creation
-            $query = "INSERT INTO dndcharacters (CName, Race, Class, Background, Notes, userOwner, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints, visibility, searchBy) 
-                values (:cname, :race, :class, :background, :notes, :userOwner, :strength, :intelligence, :dexterity, :wisdom, :constitution, :charisma, :hitpoints, :visibility, :searchBy)";
+            $query = "INSERT INTO dndcharacters (CName, Race, Class, Background, userOwner, strength, intelligence, dexterity, wisdom, constitution, charisma, hitpoints) 
+                values (:cname, :race, :class, :background, :userOwner, :strength, :intelligence, :dexterity, :wisdom, :constitution, :charisma, :hitpoints)";
 
             $statement = $db->prepare($query);
 
@@ -94,7 +94,6 @@
             $statement->bindParam(":race", $race);
             $statement->bindParam(":class", $class);
             $statement->bindParam(":background", $background);
-            $statement->bindParam(":notes", $notes);
             $statement->bindParam(":userOwner", $_SESSION['loginid']);
             $statement->bindParam(":strength", $strength);
             $statement->bindParam(":intelligence", $intelligence);
@@ -103,8 +102,6 @@
             $statement->bindParam(":constitution", $constitution);
             $statement->bindParam(":charisma", $charisma);
             $statement->bindParam(":hitpoints", $hitPoints);
-            $statement->bindParam(":visibility", $visibility);
-            $statement->bindParam(":searchBy", $search);
 
             $statement->execute();
 
@@ -194,7 +191,6 @@
 </head>
 <body>
 <?php require "header.php"?>
-<?php require "searchBar.php"?>
 <!-- Start of form -->
 <div class="container">
     <h2>Enter your characters stats</h2>
@@ -246,26 +242,6 @@
                 <label>Hit Points</label>
                 <input type="number" class="form-control" name="hitpoints" value=10>
                 <span class="help-block"></span>
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-md-3">
-                <label>Notes</label>
-                <input type="text" class="form-control" name="notes">
-                <span class="help-block"></span>
-            </div>
-        </div>
-        <div class="custom-control custom-checkbox mb-3">
-            <input type="checkbox" class="custom-control-input" id="customCheck" name="visibility" value="visibility">
-            <label class="custom-control-label" for="customCheck">Do you want your character to be publicly visible?</label>
-        </div>
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="upload">Upload</span>
-            </div>
-            <div class="custom-file">
-                <input type="file" class="custom-file-input" id="image" aria-describedby="image" name="image">
-                <label class="custom-file-label" for="image">Choose file</label>
             </div>
         </div>
         <div class="form-group">

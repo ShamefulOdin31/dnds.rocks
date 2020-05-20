@@ -35,7 +35,6 @@
     $race = filter_input(INPUT_POST, 'races', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $class = filter_input(INPUT_POST, 'classes', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $background = filter_input(INPUT_POST, 'background', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $search = filter_input(INPUT_POST, 'searchBy', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
     if($_SERVER["REQUEST_METHOD"] == "POST")
     {
@@ -95,7 +94,6 @@
 <body>
 <!-- Start of content -->
 <?php require "header.php"?>
-<?php require "searchBar.php"?>
     <div class="container">
         <h2>Create a character</h2>
         <p>Fill out the form to create a character</p>
@@ -136,16 +134,6 @@
                     <label>Background</label>
                     <input type="text" name="background" class="form-control">
                     <span class="help-block"><?= $backgroundError ?></span>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-md-5">
-                    <label for="searchBy">Categories</label>
-                    <select name="searchBy" id="searchBy" class="form-control">
-                        <?php foreach($categoriesResults as $key => $value) :?>
-                            <option value="<?= $value['catname'] ?>"><?= $value['catname'] ?></option>
-                        <?php endforeach?>
-                    </select>
                 </div>
             </div>
             <div class="form-group">
