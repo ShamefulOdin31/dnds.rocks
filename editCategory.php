@@ -51,7 +51,6 @@
 </head>
 <body>
     <?php require "header.php"?>
-    <?php require "searchBar.php"?>
     <div class="container">
         <h2>Edit Categories</h2>
         <form method="post">

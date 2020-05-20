@@ -85,7 +85,6 @@
 </head>
 <body>
 <?php require "header.php" ?>
-<?php require "searchBar.php"?>
 <!-- Start of content -->
 <div class="container">
     <h1>Welcome <?= htmlspecialchars($_SESSION["username"]) ?></h1>

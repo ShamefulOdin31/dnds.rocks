@@ -57,7 +57,6 @@
 </head>
 <body>
 <?php require "header.php"?>
-<?php require "searchBar.php"?>
 <!-- Start of content -->
 <div class="container">
     <h2>List of Spells</h2>

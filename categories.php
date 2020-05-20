@@ -29,7 +29,6 @@
 </head>
 <body>
     <?php require "header.php" ?>
-    <?php require "searchBar.php" ?>
     <nav class="navbar navbar-expand-sm navbar-dark">
     <form class="form-inline my-2 my-lg-0 ml-auto" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
         <select name="type" id="type" class="form-control">
