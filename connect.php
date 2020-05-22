@@ -1,7 +1,7 @@
 <?php 
     define('DB_DSN', 'mysql:host=localhost;dbname=dndproject;charset=utf8');
-    define('DB_USER', 'serveruser2');
-    define('DB_PASS','richard');
+    define('DB_USER', 'remote ');
+    define('DB_PASS','password');
 
     // login for first phpmyadmin login screen it
     // Username: serveruser2
