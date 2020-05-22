@@ -21,10 +21,20 @@
 <!-- Start of content -->
     <div class="container">
         <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
-            <p>You must go to the account page in order to use this site</p>
+            <h1 class="text-center">You must go to the account page in order to use this site</h1>
             <button type="button" class="btn bnt-primary btn-lg"><a href="account.php"></a>Account</button>
+            <a class="btn btn-primary btn-lg" href="account.php">Account</a>
         <?php else: ?>
-
+            <br><br><br>
+            <div class="container">
+                <div class="row">
+                    <div class="col text-center">
+                        <h1 class="center-text">You must login to a account to use this site.</h1>
+                        <br>
+                        <a class="btn btn-primary btn-lg center-block" href="login.php">Login</a>
+                    </div>
+                </div>
+            </div>
         <?php endif ?>
     </div>
 </body>

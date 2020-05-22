@@ -6,6 +6,10 @@
     // login for first phpmyadmin login screen it
     // Username: serveruser2
     // Password: password
+
+    // Login for remote phpmyadmin 
+    // Username : root
+    // Password: richard
     try
     {
         $db = new PDO(DB_DSN, DB_USER, DB_PASS);
