@@ -21,6 +21,7 @@
 <!-- Start of content -->
     <div class="container">
         <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
+            <br><br><br>
             <div class="container">
                 <div class="row">
                     <div class="col text-center">
