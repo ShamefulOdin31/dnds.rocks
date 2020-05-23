@@ -22,7 +22,6 @@
     <div class="container">
         <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true):?>
             <h1 class="text-center">You must go to the account page in order to use this site</h1>
-            <button type="button" class="btn bnt-primary btn-lg"><a href="account.php"></a>Account</button>
             <a class="btn btn-primary btn-lg" href="account.php">Account</a>
         <?php else: ?>
             <br><br><br>
