@@ -26,6 +26,7 @@
                 <div class="row">
                     <div class="col text-center">
                         <h1 class="text-center">You must go to the account page in order to use this site</h1>
+                        <br>
                         <a class="btn btn-primary btn-lg" href="account.php">Account</a>
                     </div>
                 </div>
